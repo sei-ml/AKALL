@@ -40,9 +40,6 @@ ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES graphics,utility,compute
 
 ### Set payload entrypoint
-CMD ["/bin/bash", "/home/payload/workspace/scripts/sockets_init.sh"]
-
-### Set payload entrypoint
 CMD ["/bin/bash", "/home/payload/workspace/scripts/entrypoint.sh"]
 
 # EOF
