@@ -1,4 +1,3 @@
-#pragma comment(lib, "k4a.lib")
 #include <k4a/k4a.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -82,54 +81,82 @@ int main(int argc,char* argv[]){
 
   // Set cameras settings based on cmd args
   if(fps=="5")
-  config.camera_fps       = K4A_FRAMES_PER_SECOND_5;
+    config.camera_fps       = K4A_FRAMES_PER_SECOND_5;
   else if(fps=="15")
-  config.camera_fps       = K4A_FRAMES_PER_SECOND_15;
+    config.camera_fps       = K4A_FRAMES_PER_SECOND_15;
   else if(fps=="30")
-  config.camera_fps       = K4A_FRAMES_PER_SECOND_15;
+    config.camera_fps       = K4A_FRAMES_PER_SECOND_15;
 
   if(color=="MJPG")
-  config.color_format     = K4A_IMAGE_FORMAT_COLOR_MJPG;
+    config.color_format     = K4A_IMAGE_FORMAT_COLOR_MJPG;
   else if(color=="NV12")
-  config.color_format     = K4A_IMAGE_FORMAT_COLOR_NV12;
+    config.color_format     = K4A_IMAGE_FORMAT_COLOR_NV12;
   else if(color=="YUY2")
-  config.color_format     = K4A_IMAGE_FORMAT_COLOR_YUY2;
+    config.color_format     = K4A_IMAGE_FORMAT_COLOR_YUY2;
   else if(color=="BGRA32")
-  config.color_format     = K4A_IMAGE_FORMAT_COLOR_BGRA32;
+    config.color_format     = K4A_IMAGE_FORMAT_COLOR_BGRA32;
   else if(color=="DEPTH16")
-  config.color_format     = K4A_IMAGE_FORMAT_DEPTH16;
+    config.color_format     = K4A_IMAGE_FORMAT_DEPTH16;
   else if(color=="IR16")
-  config.color_format     = K4A_IMAGE_FORMAT_IR16;
+    config.color_format     = K4A_IMAGE_FORMAT_IR16;
 
   if(resolution=="OFF")
-  config.color_resolution     = K4A_COLOR_RESOLUTION_OFF;
+    config.color_resolution     = K4A_COLOR_RESOLUTION_OFF;
   else if(resolution=="720P")
-  config.color_resolution     = K4A_COLOR_RESOLUTION_720P;
+    config.color_resolution     = K4A_COLOR_RESOLUTION_720P;
   else if(resolution=="1080P")
-  config.color_resolution     = K4A_COLOR_RESOLUTION_1080P;
+    config.color_resolution     = K4A_COLOR_RESOLUTION_1080P;
   else if(resolution=="1440P")
-  config.color_resolution     = K4A_COLOR_RESOLUTION_1440P;
+    config.color_resolution     = K4A_COLOR_RESOLUTION_1440P;
   else if(resolution=="1536P")
-  config.color_resolution     = K4A_COLOR_RESOLUTION_1536P;
+    config.color_resolution     = K4A_COLOR_RESOLUTION_1536P;
   else if(resolution=="2160P")
-  config.color_resolution     = K4A_COLOR_RESOLUTION_2160P;
+    config.color_resolution     = K4A_COLOR_RESOLUTION_2160P;
   else if(resolution=="3072P")
-  config.color_resolution     = K4A_COLOR_RESOLUTION_3072P;
+    config.color_resolution     = K4A_COLOR_RESOLUTION_3072P;
 
   if(depth=="OFF")
-  config.depth_mode     = K4A_DEPTH_MODE_OFF;
+    config.depth_mode     = K4A_DEPTH_MODE_OFF;
   else if(depth=="NFOV_2X2BINNED")
-  config.depth_mode     = K4A_DEPTH_MODE_NFOV_2X2BINNED;
+    config.depth_mode     = K4A_DEPTH_MODE_NFOV_2X2BINNED;
   else if(depth=="NFOV_UNBINNED")
-  config.depth_mode     = K4A_DEPTH_MODE_NFOV_UNBINNED;
+    config.depth_mode     = K4A_DEPTH_MODE_NFOV_UNBINNED;
   else if(depth=="WFOV_2X2BINNED")
-  config.depth_mode     = K4A_DEPTH_MODE_WFOV_2X2BINNED;
+    config.depth_mode     = K4A_DEPTH_MODE_WFOV_2X2BINNED;
   else if(depth=="WFOV_UNBINNED")
-  config.depth_mode     = K4A_DEPTH_MODE_WFOV_UNBINNED;
+    config.depth_mode     = K4A_DEPTH_MODE_WFOV_UNBINNED;
   else if(depth=="PASSIVE_IR")
-  config.depth_mode     = K4A_DEPTH_MODE_PASSIVE_IR;
+    config.depth_mode     = K4A_DEPTH_MODE_PASSIVE_IR;
 
-  //k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_AUTO, 130000 );
+  if(exposure=="A")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_AUTO, 130000);
+  else if (exposure=="M1" || exposure=="M500")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 500);
+  else if (exposure=="M2" || exposure=="M1250")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 1250);
+  else if (exposure=="M3" || exposure=="M2500")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 2500);
+  else if (exposure=="M4" || exposure=="M10000")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 10000);
+  else if (exposure=="M5" || exposure=="M20000")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 20000);
+  else if (exposure=="M6" || exposure=="M30000")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 30000);
+  else if (exposure=="M7" || exposure=="M40000")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 40000);
+  else if (exposure=="M8" || exposure=="M50000")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 50000);
+  else if (exposure=="M9" || exposure=="M60000")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 60000);
+  else if (exposure=="M10" || exposure=="M80000")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 80000);
+  else if (exposure=="M11" || exposure=="M100000")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 100000);
+  else if (exposure=="M12" || exposure=="M120000")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 120000);
+  else if (exposure=="M13" || exposure=="M130000")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 130000);
+
   //k4a_device_set_color_control(device, K4A_COLOR_CONTROL_BRIGHTNESS, K4A_COLOR_CONTROL_MODE_MANUAL, 255 ); 0 - 255
   //k4a_device_set_color_control(device, K4A_COLOR_CONTROL_CONTRAST, K4A_COLOR_CONTROL_MODE_MANUAL, 255 );
   //k4a_device_set_color_control(device, K4A_COLOR_CONTROL_SATURATION, K4A_COLOR_CONTROL_MODE_MANUAL, 0 );
