@@ -34,22 +34,37 @@ docker build -t payload_image .
 * [pl_sock] binds messages incoming from the host enclave to the payload's container.
 * [/storage] shared directory within the payload's container  
 * [entrypoint.sh] launches application's socket server and logger
-* Example socket messages:
+* Example capture sequence:
   * K15MJPG07201-1671006611
   * K30MJPG10802-1671006622
   * K15MJPG11403-1671006633
-  * K30MJPG21604-1671006644
+  * K30MJPG21602-1671006644
   * K15MJPG30720-1671006655
 
-* Example Socket messages with color format:
+* Example capture sequence with color format:
   * K05MJPG07201-EA-B128-C5-S32-H2-G0-WA-P0-L2-1671006611
   * K05MJPG10801-EM1-B100-C2-S62-H4-G10-W3611-P1-L1-1671006622
   * K15MJPG11403-E80000-B60-C2-S40-H0-G128-W53611-P0-L1-1671006622
-  * K30MJPG21604-E130000-B189-C3-S12-H1-G255-WA-P0-L2-1671006633
+  * K30MJPG21602-E130000-B189-C3-S12-H1-G255-WA-P0-L2-1671006633
   * K15MJPG30720-EM11-B255-C8-S33-H3-G0-WA-P1-L1-1671006644
 
 ###### Launch Container
 ```
 sudo chmod +x ./scripts/launch_container.sh
 sudo ./scripts/launch_container.sh payload_container payload_image
+```
+###### Run Interactive Mode
+A python script, executed from host machine, with user inputs to generate capture sequence.
+```
+cd include/
+sudo python3 socket_coms_main.py
+```
+
+Example capture sequence and response:
+```
+[KINECT LUNA] starting up on /tmp/payload_sockets/pl_sock
+[KINECT LUNA] Listening for connections on /tmp/payload_sockets/pl_sock
+[KINECT LUNA] Received data from /tmp/payload_sockets/pl_sock | DATA [56]: b'K05MJPG07201-EA-B128-C5-S32-H2-G0-W3611-P0-L1-1671685830'
+[KINECT LUNA] K4A Image Capture: K05MJPG07201 t:1671685830
+[KINECT LUNA] K4A Color Settings: EA B128 C5 S32 H2 G0 W3611 P0 L1
 ```
