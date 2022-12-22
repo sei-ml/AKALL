@@ -156,11 +156,32 @@ int main(int argc,char* argv[]){
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 120000);
   else if (exposure=="M13" || exposure=="M130000")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 130000);
-    
-  //k4a_device_set_color_control(device, K4A_COLOR_CONTROL_BRIGHTNESS, K4A_COLOR_CONTROL_MODE_MANUAL, 255 ); 0 - 255
-  //k4a_device_set_color_control(device, K4A_COLOR_CONTROL_CONTRAST, K4A_COLOR_CONTROL_MODE_MANUAL, 255 );
-  //k4a_device_set_color_control(device, K4A_COLOR_CONTROL_SATURATION, K4A_COLOR_CONTROL_MODE_MANUAL, 0 );
-  //k4a_device_set_color_control(device, K4A_COLOR_CONTROL_SHARPNESS, K4A_COLOR_CONTROL_MODE_MANUAL, 255 );
+
+  //Default value is 128
+  int brightness_integer = atoi(brightness.c_str());
+  if(brightness_integer>=0 || brightness_integer <=255)
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_BRIGHTNESS, K4A_COLOR_CONTROL_MODE_MANUAL, brightness_integer );
+
+  //Defaul value is 5
+  int contrast_integer = atoi(contrast.c_str());
+  if(contrast_integer>=0 || contrast_integer <=10)
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_CONTRAST, K4A_COLOR_CONTROL_MODE_MANUAL, contrast_integer );
+
+  //Default value is 32
+  int saturation_integer = atoi(saturation.c_str());
+  if(saturation_integer>=0 || saturation_integer <=63)
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_SATURATION, K4A_COLOR_CONTROL_MODE_MANUAL, saturation_integer );
+
+  //Default value is 2
+  int sharpness_integer = atoi(sharpness.c_str());
+  if(sharpness_integer>=0 || sharpness_integer <=4)
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_SHARPNESS, K4A_COLOR_CONTROL_MODE_MANUAL, sharpness_integer );
+
+  //Default value is 0
+  int gain_integer = atoi(gain.c_str());
+  if(gain_integer >= 0 || gain_integer <=255)
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_GAIN, K4A_COLOR_CONTROL_MODE_MANUAL, gain_integer );
+
   //k4a_device_set_color_control(device, K4A_COLOR_CONTROL_WHITEBALANCE, K4A_COLOR_CONTROL_MODE_AUTO, 2500 );
   //k4a_device_set_color_control(device, K4A_COLOR_CONTROL_BACKLIGHT_COMPENSATION, K4A_COLOR_CONTROL_MODE_MANUAL, 0 );
   //k4a_device_set_color_control(device, K4A_COLOR_CONTROL_POWERLINE_FREQUENCY, K4A_COLOR_CONTROL_MODE_MANUAL, 1 );
