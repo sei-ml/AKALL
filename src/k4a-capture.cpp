@@ -188,9 +188,11 @@ int main(int argc,char* argv[]){
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_WHITEBALANCE, K4A_COLOR_CONTROL_MODE_AUTO, 0 );
   else{
       int white_balance_integer = atoi(white_balance.c_str());
-      k4a_device_set_color_control(device, K4A_COLOR_CONTROL_WHITEBALANCE, K4A_COLOR_CONTROL_MODE_MANUAL, white_balance_integer );
+      white_balance_integer = white_balance_integer - (white_balance_integer%10);
+      k4a_device_set_color_control(device, K4A_COLOR_CONTROL_WHITEBALANCE, K4A_COLOR_CONTROL_MODE_MANUAL, white_balance_integer);
+      printf("DEBUG: %i\n", white_balance_integer);
   }
-  
+
   int blacklight_comp_integer = atoi(blacklight_comp.c_str());
   if(blacklight_comp_integer == 0 || blacklight_comp_integer ==1)
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_BACKLIGHT_COMPENSATION, K4A_COLOR_CONTROL_MODE_MANUAL, blacklight_comp_integer );
