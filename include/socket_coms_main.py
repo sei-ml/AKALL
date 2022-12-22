@@ -173,15 +173,15 @@ def main():
         color_settings = "D"
 
         if input_4 == "y" or input_4 == "Y":
-            input_4_1 = input("Enter Exposure Time (A, M1-M12, M500-M130000) #")
-            input_4_2 = input("Enter Brightness (0-255) #")
-            input_4_3 = input("Enter Contrast (0-255) #")
-            input_4_4 = input("Enter Saturation (0-255) #")
-            input_4_5 = input("Enter Sharpness (0-255) #")
-            input_4_6 = input("Enter Gain (0-255) #")
-            input_4_7 = input("Enter White Balance (A, M2500-M12500) #")
-            input_4_8 = input("Enter Backlight Compensation (0,1) #")
-            input_4_9 = input("Enter Power Line Compensation (1: 50hz ,2: 60Hz) #")
+            input_4_1 = input("Enter Exposure Time (A, M1-M13, M500-M130000) d:A#")
+            input_4_2 = input("Enter Brightness (0-255) d:128 #")
+            input_4_3 = input("Enter Contrast (0-10) d:5#")
+            input_4_4 = input("Enter Saturation (0-63) d:32#")
+            input_4_5 = input("Enter Sharpness (0-4) d:2#")
+            input_4_6 = input("Enter Gain (0-255) d:0#")
+            input_4_7 = input("Enter White Balance (A, 2500-12500) d:A #")
+            input_4_8 = input("Enter Backlight Compensation (0,1) d:0#")
+            input_4_9 = input("Enter Power Line Compensation (1: 50hz ,2: 60Hz) d:2 #")
 
             color_settings = 'E'+input_4_1+"-"+'B'+input_4_2+"-"+'C'+input_4_3+"-"+'S'+input_4_4+"-"+'H'+input_4_5+"-"+'G'+input_4_6+"-"+'W'+input_4_7+"-"+'P'+input_4_8+"-"+'L'+input_4_9
 

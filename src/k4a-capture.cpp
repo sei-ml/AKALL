@@ -128,8 +128,9 @@ int main(int argc,char* argv[]){
   else if(depth=="PASSIVE_IR")
     config.depth_mode     = K4A_DEPTH_MODE_PASSIVE_IR;
 
+  //Default is A
   if(exposure=="A")
-    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_AUTO, 130000);
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_AUTO, 0);
   else if (exposure=="M1" || exposure=="M500")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 500);
   else if (exposure=="M2" || exposure=="M1250")
@@ -182,9 +183,21 @@ int main(int argc,char* argv[]){
   if(gain_integer >= 0 || gain_integer <=255)
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_GAIN, K4A_COLOR_CONTROL_MODE_MANUAL, gain_integer );
 
-  //k4a_device_set_color_control(device, K4A_COLOR_CONTROL_WHITEBALANCE, K4A_COLOR_CONTROL_MODE_AUTO, 2500 );
-  //k4a_device_set_color_control(device, K4A_COLOR_CONTROL_BACKLIGHT_COMPENSATION, K4A_COLOR_CONTROL_MODE_MANUAL, 0 );
-  //k4a_device_set_color_control(device, K4A_COLOR_CONTROL_POWERLINE_FREQUENCY, K4A_COLOR_CONTROL_MODE_MANUAL, 1 );
+  //Default is A
+  if(white_balance == "A")
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_WHITEBALANCE, K4A_COLOR_CONTROL_MODE_AUTO, 0 );
+  else{
+      int white_balance_integer = atoi(white_balance.c_str());
+      k4a_device_set_color_control(device, K4A_COLOR_CONTROL_WHITEBALANCE, K4A_COLOR_CONTROL_MODE_MANUAL, white_balance_integer );
+  }
+  
+  int blacklight_comp_integer = atoi(blacklight_comp.c_str());
+  if(blacklight_comp_integer == 0 || blacklight_comp_integer ==1)
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_BACKLIGHT_COMPENSATION, K4A_COLOR_CONTROL_MODE_MANUAL, blacklight_comp_integer );
+
+  int powerline_freq_integer = atoi(powerline_freq.c_str());
+  if(powerline_freq_integer == 0 || powerline_freq_integer ==1)
+    k4a_device_set_color_control(device, K4A_COLOR_CONTROL_BACKLIGHT_COMPENSATION, K4A_COLOR_CONTROL_MODE_MANUAL, powerline_freq_integer );
 
   // Start the camera with the given configuration
   if (K4A_FAILED(k4a_device_start_cameras(device, &config)))
