@@ -128,6 +128,7 @@ int main(int argc,char* argv[]){
   else if(depth=="PASSIVE_IR")
     config.depth_mode     = K4A_DEPTH_MODE_PASSIVE_IR;
 
+  if(argc>12){
   //Default is A
   if(exposure=="A")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_AUTO, 0);
@@ -200,7 +201,7 @@ int main(int argc,char* argv[]){
   int powerline_freq_integer = atoi(powerline_freq.c_str());
   if(powerline_freq_integer == 0 || powerline_freq_integer ==1)
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_BACKLIGHT_COMPENSATION, K4A_COLOR_CONTROL_MODE_MANUAL, powerline_freq_integer );
-
+  }
   // Start the camera with the given configuration
   if (K4A_FAILED(k4a_device_start_cameras(device, &config)))
   {
