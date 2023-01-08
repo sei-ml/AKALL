@@ -181,7 +181,7 @@ def main():
             input_4_6 = input("Enter Gain (0-255) d:0 #")
             input_4_7 = input("Enter White Balance (A, 2500-12500) d:A #")
             input_4_8 = input("Enter Backlight Compensation (0,1) d:0 #")
-            input_4_9 = input("Enter Power Line Compensation (1: 50hz ,2: 60Hz) d:2 #")
+            input_4_9 = input("Enter Power Line Frequency (1: 50hz ,2: 60Hz) d:2 #")
 
             color_settings = 'E'+input_4_1+"-"+'B'+input_4_2+"-"+'C'+input_4_3+"-"+'S'+input_4_4+"-"+'H'+input_4_5+"-"+'G'+input_4_6+"-"+'W'+input_4_7+"-"+'P'+input_4_8+"-"+'L'+input_4_9
 

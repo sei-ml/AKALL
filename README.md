@@ -31,15 +31,36 @@ docker build -t payload_image .
  * Creates and binds UNIX sockets in /tmp/payload_sockets
 
 ###### Concept of Operation
-* [pl_sock] binds messages incoming from the host enclave to the payload's container.
-* [/storage] shared directory within the payload's container  
-* [entrypoint.sh] launches application's socket server and logger
-* Example capture sequence:
+Our team developed a custom software application that utilizes the Azure Kinect C and C++ SDK to control the camera and capture data from its various sensors. The application is designed within a Docker container running Ubuntu 18.04 LTS, providing an isolated and portable environment for it to operate in, ideal for integration within bigger systems such as rovers and robots. We implemented a UNIX socket server using Python3, which allows the application to communicate with other programs or devices using the UNIX socket protocol. The socket server enables the application to control the camera using special capture sequence messages, which are custom commands or instructions that we have implemented.
+
+* Notes:
+  * [pl_sock] binds messages incoming from the host enclave to the payload's container.
+  * [/storage] shared directory within the payload's container  
+  * [entrypoint.sh] launches application's socket server and logger
+
+###### Capture Sequence
+Here is a list of example commands that can be used to affect the camera's built-in parameters and set compression and other parameters:
+
   * K15MJPG07201-1671006611
   * K30MJPG10802-1671006622
   * K15MJPG11403-1671006633
   * K30MJPG21602-1671006644
   * K15MJPG30720-1671006655
+
+In these commands, the first part is mandatory to ensure a successful capture sequence ("K05MJPG07201", "K05MJPG10801", etc.), and it indicates the frame rate (FPS) and compression used, as well as other parameters. For instance, the "05" in the first part represents the FPS, "MJPG" represents the compression used, and "0720" is the resolution (in this case, 720p). The "1" at the end of the first part indicates the depth mode. The camera is capable of capturing up to 4k resolution, and there are four different depth modes available to access through the Azure Kinect SDK.  
+
+```
+  K |  15  | MJPG | 0720 | 1          | 1671006655
+  K |  FPS | COMP | RESO | DEPTH_MODE | TIMESTAMP
+```
+```
+  FPS: 05, 15, 30
+  COMP: MJPG (Primary), NV12, YUY2, BGRA, DP16, IR16
+  RESO: 0720, 1080, 1440, 1536, 2160, 3072
+  DEPTH_MODE: 0:OFF, 1:NFOV_2X2B 2:NFOV_U 3:WFOV_2X2B 4:WFOV_U 5:P_IR
+```
+
+The second and optional part ("EA-B128-C5-S32-H2-G0-WA-P0-L2-1671006611", etc.) specifies the Exposure, Contrast, Sharpness, Gain, White Balance, Black Light Compensation, Power Line Frequency and timestamp. The values for these parameters may vary depending on the specific requirements of the application. For example, the "EA" in the second part sets the exposure to automatic mode, if a number is specified, such as "B128" the Contrast option is set to 128, "S" indicates the Sharpness, "G" indicates the Gain, "W" indicates the White Balance, and "1671006611" is the timestamp."
 
 * Example capture sequence with color format:
   * K05MJPG07201-EA-B128-C5-S32-H2-G0-WA-P0-L2-1671006611
@@ -47,6 +68,22 @@ docker build -t payload_image .
   * K15MJPG11403-E80000-B60-C2-S40-H0-G128-W53611-P0-L1-1671006622
   * K30MJPG21602-E130000-B189-C3-S12-H1-G255-WA-P0-L2-1671006633
   * K15MJPG30720-EM11-B255-C8-S33-H3-G0-WA-P1-L1-1671006644
+
+```
+       EA   |   B128   |   C5   |    S32   |    H2   | G0 |    WA   |      P0       |      L2     
+    EXPOSURE|BRIGHTNESS|CONTRAST|SATURATION|SHARPNESS|GAIN|WHITE BAL|BLACKLIGHT COMP|PWR LINE FREQ
+```  
+```
+EXPOSURE TIME: A (Automatic), M1-M13, M500-M130000) default: A
+BRIGHTNESS (0-255) default:128
+CONTRAST (0-10) default:5
+SATURATION (0-63) default:32
+SHARPNESS (0-4) default:2
+GAIN (0-255) default:0
+WHITE BALANCE (A, 2500-12500) default:A
+BLACKLIGHT COMPENSATION (0,1) default:0
+POWER LINE FREQUENCY (1: 50hz ,2: 60Hz) default:2
+```
 
 ###### Launch Container
 ```
