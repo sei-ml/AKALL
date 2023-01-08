@@ -43,15 +43,15 @@ EA      |   B128   |   C5   |    S32   |    H2   | G0 |    WA   |      P0       
 EXPOSURE|BRIGHTNESS|CONTRAST|SATURATION|SHARPNESS|GAIN|WHITE BAL|BLACKLIGHT COMP|PWR LINE FREQ
 ```  
 ```
-EXPOSURE TIME: A (Automatic), M1-M13, M500-M130000) default: A
-BRIGHTNESS (0-255) default:128
-CONTRAST (0-10) default:5
-SATURATION (0-63) default:32
-SHARPNESS (0-4) default:2
-GAIN (0-255) default:0
-WHITE BALANCE (A, 2500-12500) default:A
-BLACKLIGHT COMPENSATION (0,1) default:0
-POWER LINE FREQUENCY (1: 50hz ,2: 60Hz) default:2
+EXPOSURE TIME: A, M1-M13, M500-M130000. Default: EA (AUTO)
+BRIGHTNESS: Integer from 0 to 255. Default: B128
+CONTRAST: Integer from 0 to 10. Default: C5
+SATURATION: Integer from 0 to 63. Default: S32
+SHARPNESS: Integer from 0 to 4. Default: H2
+GAIN: Integer from 0 to 255. Default: G0
+WHITE BALANCE: A, Integer of 10 incremends from 2500 to 12500. Default: WA
+BLACKLIGHT COMPENSATION: 0,1. Default: P0
+POWER LINE FREQUENCY: 1: 50hz ,2: 60Hz. Default: L2
 ```
 ###### Install Nvidia Docker toolkit on Ubuntu 18.04 or 20.04
 Set distribution variable based on your system's configuration.
