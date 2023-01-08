@@ -39,7 +39,7 @@ The second and optional part ("EA-B128-C5-S32-H2-G0-WA-P0-L2-1671006611", etc.) 
   * K15MJPG30720-EM11-B255-C8-S33-H3-G0-WA-P1-L1-1671006644
 
 ```
-EA   |   B128   |   C5   |    S32   |    H2   | G0 |    WA   |      P0       |      L2     
+EA      |   B128   |   C5   |    S32   |    H2   | G0 |    WA   |      P0       |      L2     
 EXPOSURE|BRIGHTNESS|CONTRAST|SATURATION|SHARPNESS|GAIN|WHITE BAL|BLACKLIGHT COMP|PWR LINE FREQ
 ```  
 ```
