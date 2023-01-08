@@ -95,7 +95,7 @@ cd include/
 sudo python3 socket_coms_main.py
 ```
 
-Example capture sequence and response:
+###### Example Response
 ```
 [KINECT LUNA] starting up on /tmp/payload_sockets/pl_sock
 [KINECT LUNA] Listening for connections on /tmp/payload_sockets/pl_sock
