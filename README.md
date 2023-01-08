@@ -1,36 +1,5 @@
 ###  Azure Kinect a la Luna (AKALL)
-
-###### Install Nvidia Docker toolkit on Ubuntu 18.04 or 20.04
-Set distribution variable based on your system's configuration.
-Note: only viable on systems equipped with Nvidia VGAs. Tested on Nvidia GTX-1080
-```
-distribution=ubuntu18.04
-```
-```
-distribution=ubuntu20.04
-```
-```
-curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
-curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
-
-sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
-sudo systemctl restart docker
-```
-source: [nvidia-container-toolkit](https://github.com/NVIDIA/nvidia-docker/issues/1186)
-
-###### Build payload's Docker image
-```
-cd AKALL/
-docker build -t payload_image .
-```
-* This docker image will install the following key packages:
- * python3 and python3-pip
- * k4a-tools and libk4a1.4-dev
- * software-properties-common, curl, build-essential...etc
- * Compiles our custom Azure Kinect software
- * Creates and binds UNIX sockets in /tmp/payload_sockets
-
-###### Concept of Operation
+##### Concept of Operation
 Our team developed a custom software application that utilizes the Azure Kinect C and C++ SDK to control the camera and capture data from its various sensors. The application is designed within a Docker container running Ubuntu 18.04 LTS, providing an isolated and portable environment for it to operate in, ideal for integration within bigger systems such as rovers and robots. We implemented a UNIX socket server using Python3, which allows the application to communicate with other programs or devices using the UNIX socket protocol. The socket server enables the application to control the camera using special capture sequence messages, which are custom commands or instructions that we have implemented.
 
 * Notes:
@@ -84,7 +53,36 @@ WHITE BALANCE (A, 2500-12500) default:A
 BLACKLIGHT COMPENSATION (0,1) default:0
 POWER LINE FREQUENCY (1: 50hz ,2: 60Hz) default:2
 ```
+###### Install Nvidia Docker toolkit on Ubuntu 18.04 or 20.04
+Set distribution variable based on your system's configuration.
+Note: only viable on systems equipped with Nvidia VGAs. Tested on Nvidia GTX-1080
+```
+distribution=ubuntu18.04
+```
+```
+distribution=ubuntu20.04
+```
+```
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
 
+sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
+sudo systemctl restart docker
+```
+source: [nvidia-container-toolkit](https://github.com/NVIDIA/nvidia-docker/issues/1186)
+
+###### Build payload's Docker image
+```
+cd AKALL/
+docker build -t payload_image .
+```
+* This docker image will install the following key packages:
+ * python3 and python3-pip
+ * k4a-tools and libk4a1.4-dev
+ * software-properties-common, curl, build-essential...etc
+ * Compiles our custom Azure Kinect software
+ * Creates and binds UNIX sockets in /tmp/payload_sockets
+ 
 ###### Launch Container
 ```
 sudo chmod +x ./scripts/launch_container.sh
