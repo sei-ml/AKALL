@@ -107,9 +107,9 @@ def main():
         if(len(params)==10):
             cmd_byte = bytearray(input_cmd+'-'+str(ts), 'utf-8')
         else:
-            cmd_byte = bytearray(input_cmd+'-D-'+str(ts), 'utf-8')
+            cmd_byte = bytearray(input_cmd+'-'+str(ts), 'utf-8')
 
-        print('\n'+PRINT_PREPEND + 'K4A Image str: ' + input_cmd+str(ts))
+        print('\n'+PRINT_PREPEND + 'K4A Image str: ' + input_cmd+'-'+str(ts))
 
         unix_out['OUT'].send(cmd_byte)
 

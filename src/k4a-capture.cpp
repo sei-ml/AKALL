@@ -80,7 +80,7 @@ int main(int argc,char* argv[]){
   config.color_resolution = K4A_COLOR_RESOLUTION_1080P;
   config.depth_mode = K4A_DEPTH_MODE_NFOV_2X2BINNED;
 
-  // Set cameras settings based on cmd args
+  // Set cameras settings based on capture sequence
   if(fps=="5")
     config.camera_fps       = K4A_FRAMES_PER_SECOND_5;
   else if(fps=="15")
