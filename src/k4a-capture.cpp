@@ -42,7 +42,6 @@ int main(int argc,char* argv[]){
     white_balance = argv[24];
     blacklight_comp = argv[26];
     powerline_freq = argv[28];
-    unix_time = argv[30];
     printf("[AZURE KINECT] K4A Image config: \nfps: %s, color: %s, resolution: %s, depth: %s\n[AZURE KINECT] color settings: exposure: %s, brightness: %s, contrast: %s, saturation: %s, sharpness: %s, gain: %s, white_balance: %s, blacklight_comp: %s, powerline_freq: %s\n", fps.c_str(), color.c_str(), resolution.c_str(), depth.c_str(), exposure.c_str(), brightness.c_str(), contrast.c_str(), saturation.c_str(), sharpness.c_str(), gain.c_str(), white_balance.c_str(), blacklight_comp.c_str(), powerline_freq.c_str());
   }
 
