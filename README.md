@@ -1,12 +1,13 @@
-###  Azure Kinect a la Luna (AKALL)
+##  Azure Kinect a la Luna (AKALL)
 Our team developed a custom software application that utilizes the [Azure Kinect DK](https://learn.microsoft.com/en-us/azure/kinect-dk/) through the C and C++ Sensor API  to control the camera and capture data from its various sensors. The application is designed within a Docker container running Ubuntu 18.04 LTS, providing an isolated and portable environment for it to operate in, ideal for integration within larger computing systems such as rovers and robots. We implemented a UNIX socket server using Python3, which allows the application to communicate with other programs and devices using the UNIX socket protocol. The socket server enables the application to control the camera using special capture sequence messages, which are custom commands or instructions that we have implemented.
 
-##### Concepts of Operation
+### Concepts of Operation
 * **[pl_sock]** binds messages incoming from the host machine to the payload's container.
+* **[sm_sock]** binds messages incoming to the host machine from the payload's container.
 * **[/storage]** shared directory between the payload's container and the host machine.  
 * **[./scripts/entrypoint.sh]** launches application's socket server and logger
 
-###### Capture Sequence:
+#### Capture Sequence:
 Here is a list of example commands that can be used to affect the camera's built-in parameters and set compression and other parameters:
 
   * K15MJPG07201-1671006611
@@ -52,7 +53,8 @@ WHITE BALANCE: A, Integer of 10 incremends from 2500 to 12500. Default: WA
 BLACKLIGHT COMPENSATION: 0,1. Default: P0
 POWER LINE FREQUENCY: 1: 50hz ,2: 60Hz. Default: L2
 ```
-###### Install Nvidia Docker toolkit on Ubuntu 18.04 or 20.04:
+### Install and Build:
+#### Install Nvidia Docker toolkit on Ubuntu 18.04 or 20.04:
 Set distribution variable based on your system's configuration.
 Note: only viable on systems equipped with Nvidia VGAs. Tested on Nvidia GTX-1080
 ```
@@ -70,7 +72,7 @@ sudo systemctl restart docker
 ```
 source: [nvidia-container-toolkit](https://github.com/NVIDIA/nvidia-docker/issues/1186)
 
-###### Build payload's Docker image:
+#### Build payload's Docker image:
 ```
 cd AKALL/
 docker build -t payload_image .
@@ -82,12 +84,13 @@ docker build -t payload_image .
  * Compiles our custom Azure Kinect software
  * Creates and binds UNIX sockets in /tmp/payload_sockets
 
-###### Launch container:
+#### Launch container:
 ```
 sudo chmod +x ./scripts/launch_container.sh
 sudo ./scripts/launch_container.sh payload_container payload_image
 ```
-###### Run interactive mode:
+### Applications
+#### Run interactive mode:
 A python script, executed from the host machine, with user inputs to generate capture sequence.
 ```
 cd include/
@@ -119,7 +122,7 @@ K4A_COLOR_RESOLUTION_720P
 K4A_DEPTH_MODE_NFOV_2X2BINNED
 CS EA-B123-C5-S32-H2-G0-WA-P0-L2
 ```
-###### Run capture sequence console:
+#### Run capture sequence console:
 A python script, executed form the host machine, to send capture and storage management sequences and communicate with the contained machine via UNIX sockets. **Please note** that the script will add the execution timestamp as a last parameter in the capture sequence.
 ```
 cd include/
@@ -144,7 +147,7 @@ Enter Capture Sequence # K30MJPG21602-EA-B128-C5-S32-H1-G0-WA-P0-L2
 [HOST MACHINE] Done..
 ```
 
-###### Storage management commands
+#### Storage management commands
 
 * Empty /storage directory: **SM-RM-ALL**
 * Remove single capture using filename (timestamp): **SM-RM-FILENAME**
@@ -180,7 +183,7 @@ Enter Capture Sequence # SM-RM-ALL
 [HOST MACHINE] Done..
 ```
 
-###### Run test script
+#### Run test script
 The following test script generates 108 capture sequences covering some of the basic parameters of the Azure Kinect sensor API such as FPS, resolution, and depth mode.
 
 ```
