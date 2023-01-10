@@ -181,7 +181,7 @@ Enter Capture Sequence # SM-RM-ALL
 ```
 
 ###### Run test script
-The following test script generates 108 capture sequences covering all basic parameters of the Azure Kinect sensor API such as FPS, resolution, and depth mode.
+The following test script generates 108 capture sequences covering some of the basic parameters of the Azure Kinect sensor API such as FPS, resolution, and depth mode.
 
 ```
 cd include/
