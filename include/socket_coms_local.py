@@ -54,6 +54,22 @@ class UNIX_Coms():
                 params = list(cmd[0])
                 input_error = False;
 
+                if(cmd[0] == "SM" or cmd[0] == "sm"):
+                    if(cmd[1] == "LS" or cmd[1] == "ls"):
+                        if(cmd[2] == "ALL" or cmd[2] == "all"):
+                            #TODO: Send data back via UNIX Sock
+                            print(os.system('ls /storage'))
+                    if(cmd[1] == "RM" or cmd[1] == "rm"):
+                        if(cmd[2] == "ALL" or cmd[2] == "all"):
+                            if(os.path.exists('/storage')):
+                                os.system('rm /storage/*')
+                                print(PRINT_PREPEND + 'All captures deleted from /storage directory.')
+                        else:
+                            if(os.path.exists('/storage'+cmd[2]+'.tar.gz')):
+                                os.system('rm /storage/'+cmd[2]+'.tar.gz')
+                                print(PRINT_PREPEND + 'File '+cmd[2]+'.tar.gz removed from /storage directory.')
+
+
                 if(len(params) == 12):
                     fps = params[1]+params[2]
                     color = params[3]+params[4]+params[5]+params[6]

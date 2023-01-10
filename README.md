@@ -120,7 +120,7 @@ K4A_DEPTH_MODE_NFOV_2X2BINNED
 CS EA-B123-C5-S32-H2-G0-WA-P0-L2
 ```
 ###### Run capture sequence console:
-A python script, executed form the host machine, to send capture sequences and communicate with the contained machine via UNIX sockets. Please note that the script will add the execution timestamp as a last parameter in the capture sequence.
+A python script, executed form the host machine, to send capture and storage management sequences and communicate with the contained machine via UNIX sockets. Please note that the script will add the execution timestamp as a last parameter in the capture sequence.
 ```
 cd include/
 sudo python3 socket_coms_console.py
@@ -138,6 +138,41 @@ Enter Capture Sequence # K15MJPG30721
 Enter Capture Sequence # K30MJPG21602-EA-B128-C5-S32-H1-G0-WA-P0-L2
 
 [HOST MACHINE] K4A Image str: K30MJPG21602-EA-B128-C5-S32-H1-G0-WA-P0-L2-1673315140
+[HOST MACHINE] Sending data on socket: /tmp/payload_sockets/kinect_luna/pl_sock
+[HOST MACHINE] connecting to /tmp/payload_sockets/kinect_luna/pl_sock
+[HOST MACHINE] Connected
+[HOST MACHINE] Done..
+```
+
+###### Storage management commands
+
+```
+Empty /storage Directory: SM-RM-ALL
+Remove single capture: SM-RM-FILENAME
+List all captures: SM-LS-ALL
+```
+
+###### Example response:
+```
+Enter Capture Sequence # SM-RM-1673370956
+
+[HOST MACHINE] K4A Image str: SM-RM-1673370956-1673371013
+[HOST MACHINE] Sending data on socket: /tmp/payload_sockets/kinect_luna/pl_sock
+[HOST MACHINE] connecting to /tmp/payload_sockets/kinect_luna/pl_sock
+[HOST MACHINE] Connected
+[HOST MACHINE] Done..
+
+Enter Capture Sequence # SM-LS-ALL
+
+[HOST MACHINE] K4A Image str: SM-LS-ALL-1673371041
+[HOST MACHINE] Sending data on socket: /tmp/payload_sockets/kinect_luna/pl_sock
+[HOST MACHINE] connecting to /tmp/payload_sockets/kinect_luna/pl_sock
+[HOST MACHINE] Connected
+[HOST MACHINE] Done..
+
+Enter Capture Sequence # SM-RM-ALL
+
+[HOST MACHINE] K4A Image str: SM-RM-ALL-1673371045
 [HOST MACHINE] Sending data on socket: /tmp/payload_sockets/kinect_luna/pl_sock
 [HOST MACHINE] connecting to /tmp/payload_sockets/kinect_luna/pl_sock
 [HOST MACHINE] Connected
