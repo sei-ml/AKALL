@@ -29,7 +29,7 @@ In these commands, the first part is mandatory to ensure a successful capture se
   DEPTH_MODE: 0:OFF, 1:NFOV_2X2B 2:NFOV_U 3:WFOV_2X2B 4:WFOV_U 5:P_IR
 ```
 
-The second and optional part ("EA-B128-C5-S32-H2-G0-WA-P0-L2-1671006611", etc.) specifies the Exposure, Contrast, Sharpness, Gain, White Balance, Black Light Compensation, Power Line Frequency and timestamp. The values for these parameters may vary depending on the specific requirements of the application. For example, the "EA" in the second part sets the exposure to automatic mode, if a number is specified, such as "B128" the Contrast option is set to 128, "S" indicates the Sharpness, "G" indicates the Gain, "W" indicates the White Balance, and "1671006611" is the timestamp."
+The second and optional part ("EA-B128-C5-S32-H2-G0-WA-P0-L2-1671006611", etc.) specifies the Exposure, Contrast, Sharpness, Gain, White Balance, Black Light Compensation, Power Line Frequency, and timestamp. The values for these parameters may vary depending on the specific requirements of the application. For example, the "EA" in the second part sets the exposure to automatic mode, if a number is specified, such as "B128" the Contrast option is set to 128, "S" indicates the Sharpness, "G" indicates the Gain, "W" indicates the White Balance, and "1671006611" is the timestamp."
 
 * Example capture sequence with color format:
   * K05MJPG07201-EA-B128-C5-S32-H2-G0-WA-P0-L2-1671006611
