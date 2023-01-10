@@ -7,7 +7,7 @@ Our team developed a custom software application that utilizes the [Azure Kinect
   * [/storage] shared directory within the payload's container  
   * [entrypoint.sh] launches application's socket server and logger
 
-###### Capture Sequence
+###### Capture Sequence:
 Here is a list of example commands that can be used to affect the camera's built-in parameters and set compression and other parameters:
 
   * K15MJPG07201-1671006611
@@ -53,7 +53,7 @@ WHITE BALANCE: A, Integer of 10 incremends from 2500 to 12500. Default: WA
 BLACKLIGHT COMPENSATION: 0,1. Default: P0
 POWER LINE FREQUENCY: 1: 50hz ,2: 60Hz. Default: L2
 ```
-###### Install Nvidia Docker toolkit on Ubuntu 18.04 or 20.04
+###### Install Nvidia Docker toolkit on Ubuntu 18.04 or 20.04:
 Set distribution variable based on your system's configuration.
 Note: only viable on systems equipped with Nvidia VGAs. Tested on Nvidia GTX-1080
 ```
@@ -71,7 +71,7 @@ sudo systemctl restart docker
 ```
 source: [nvidia-container-toolkit](https://github.com/NVIDIA/nvidia-docker/issues/1186)
 
-###### Build payload's Docker image
+###### Build payload's Docker image:
 ```
 cd AKALL/
 docker build -t payload_image .
@@ -83,23 +83,64 @@ docker build -t payload_image .
  * Compiles our custom Azure Kinect software
  * Creates and binds UNIX sockets in /tmp/payload_sockets
 
-###### Launch Container
+###### Launch container:
 ```
 sudo chmod +x ./scripts/launch_container.sh
 sudo ./scripts/launch_container.sh payload_container payload_image
 ```
-###### Run Interactive Mode
-A python script, executed from host machine, with user inputs to generate capture sequence.
+###### Run interactive mode:
+A python script, executed from the host machine, with user inputs to generate capture sequence.
 ```
 cd include/
 sudo python3 socket_coms_main.py
 ```
 
-###### Example Response
+###### Example response:
 ```
-[KINECT LUNA] starting up on /tmp/payload_sockets/pl_sock
-[KINECT LUNA] Listening for connections on /tmp/payload_sockets/pl_sock
-[KINECT LUNA] Received data from /tmp/payload_sockets/pl_sock | DATA [56]: b'K05MJPG07201-EA-B128-C5-S32-H2-G0-W3611-P0-L1-1671685830'
-[KINECT LUNA] K4A Image Capture: K05MJPG07201 t:1671685830
-[KINECT LUNA] K4A Color Settings: EA B128 C5 S32 H2 G0 W3611 P0 L1
+Enter K4A's FPS (0:05 FPS 1:15 FPS 2:30 FPS) # 0
+Enter K4A's Color Format (0:MJPG 1:NV12 2:YUY2 3:BGRA 4:DP16 5:IR16) # 0
+Enter K4A's Color Resolution (0: Off 1:720 2:1080 3:1440 4:1536 5:2160 6:3072) # 1
+Enter K4A's Depth Mode (0: Off 1:NFOV_2X2B 2:NFOV_U 3:WFOV_2X2B 4:WFOV_U 5:P_IR) # 1
+Set K4A's Color Settings (y/n) #y
+Enter Exposure Time (A, M1-M13, M500-M130000) d:A #A
+Enter Brightness (0-255) d:128 #123
+Enter Contrast (0-10) d:5 #5
+Enter Saturation (0-63) d:32 #32
+Enter Sharpness (0-4) d:2 #2
+Enter Gain (0-255) d:0 #0
+Enter White Balance (A, 2500-12500) d:A #A
+Enter Backlight Compensation (0,1) d:0 #0
+Enter Power Line Frequency (1: 50hz ,2: 60Hz) d:2 #2
+Settings Recorded..
+
+Capturing K4A Images with the following settings:
+K4A_FRAMES_PER_SECOND_5
+K4A_IMAGE_FORMAT_COLOR_MJPG
+K4A_COLOR_RESOLUTION_720P
+K4A_DEPTH_MODE_NFOV_2X2BINNED
+CS EA-B123-C5-S32-H2-G0-WA-P0-L2
+```
+###### Run capture sequence console:
+A python script, executed form the host machine, to send capture sequences and communicate with the contained machine via UNIX sockets. Please note that the script will add the execution timestamp as a last parameter in the capture sequence.
+```
+cd include/
+sudo python3 socket_coms_console.py
+```
+###### Example responses:
+```
+Enter Capture Sequence # K15MJPG30721
+
+[HOST MACHINE] K4A Image str: K15MJPG30721-1673315086
+[HOST MACHINE] Sending data on socket: /tmp/payload_sockets/kinect_luna/pl_sock
+[HOST MACHINE] connecting to /tmp/payload_sockets/kinect_luna/pl_sock
+[HOST MACHINE] Connected
+[HOST MACHINE] Done..
+
+Enter Capture Sequence # K30MJPG21602-EA-B128-C5-S32-H1-G0-WA-P0-L2
+
+[HOST MACHINE] K4A Image str: K30MJPG21602-EA-B128-C5-S32-H1-G0-WA-P0-L2-1673315140
+[HOST MACHINE] Sending data on socket: /tmp/payload_sockets/kinect_luna/pl_sock
+[HOST MACHINE] connecting to /tmp/payload_sockets/kinect_luna/pl_sock
+[HOST MACHINE] Connected
+[HOST MACHINE] Done..
 ```
