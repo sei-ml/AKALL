@@ -9,11 +9,15 @@ import socket
 import os, os.path
 import threading
 import time
+import subprocess
 
 PRINT_PREPEND = '[KINECT LUNA] '
 ERROR_PREPEND = '[ERROR] '
 UNIX_SOCKETS_BASE_DIR = '/tmp/payload_sockets/'
 UNIX_ADDR_IN = UNIX_SOCKETS_BASE_DIR + 'pl_sock'
+UNIX_ADDR_OUT = UNIX_SOCKETS_BASE_DIR + 'sm_sock'
+D_SEND = False
+D_DATA = ''
 
 class UNIX_Coms():
 
@@ -57,15 +61,19 @@ class UNIX_Coms():
                 if(cmd[0] == "SM" or cmd[0] == "sm"):
                     if(cmd[1] == "LS" or cmd[1] == "ls"):
                         if(cmd[2] == "ALL" or cmd[2] == "all"):
-                            #TODO: Send data back via UNIX Sock
-                            print(os.system('ls /storage'))
+                            cmd_var = subprocess.run(['ls', '/storage'], stdout=subprocess.PIPE)
+                            #print('\n'+PRINT_PREPEND + '/storage: \n: ' + cmd_var.stdout.decode('utf-8'))
+                            global D_DATA
+                            global D_SEND
+                            D_DATA = cmd_var.stdout.decode('utf-8')
+                            D_SEND = True
                     if(cmd[1] == "RM" or cmd[1] == "rm"):
                         if(cmd[2] == "ALL" or cmd[2] == "all"):
                             if(os.path.exists('/storage')):
                                 os.system('rm /storage/*')
                                 print(PRINT_PREPEND + 'All captures deleted from /storage directory.')
                         else:
-                            if(os.path.exists('/storage'+cmd[2]+'.tar.gz')):
+                            if(os.path.exists('/storage/'+cmd[2]+'.tar.gz')):
                                 os.system('rm /storage/'+cmd[2]+'.tar.gz')
                                 print(PRINT_PREPEND + 'File '+cmd[2]+'.tar.gz removed from /storage directory.')
 
@@ -178,10 +186,15 @@ class UNIX_Coms():
         self.sock.close()
         print(PRINT_PREPEND + 'Socket closed: {}'.format(self.server_address))
 
-
 def main():
-
     unix_in  = {}
+    unix_out  = {}
+    global D_SEND
+    global D_DATA
+
+    def closeAll():
+        [unix_in[key].close() for key in unix_in]
+        [unix_out[key].close() for key in unix_out]
 
     try:
         unix_in = {
@@ -189,13 +202,25 @@ def main():
         }
         [unix_in[key].bind_to_socket() for key in unix_in]
     except:
-        print(PRINT_PREPEND + 'Unix sockets not available - continueing without')
-        unix = None
-        _UNIX_UP = False
+        print(PRINT_PREPEND + 'Error creating outgoing UNIX socket(s)')
+        unix_in = None
 
-    def closeAll():
-        [unix_in[key].close() for key in unix_in]
-        [unix_out[key].close() for key in unix_out]
+    try:
+        unix_out = {
+            'OUT'          : UNIX_Coms(UNIX_ADDR_OUT),
+        }
+    except:
+        print(PRINT_PREPEND + 'Error creating outgoing UNIX socket(s)')
+        unix_out = None
+
+    while True:
+        if D_SEND == True:
+            D_DATA = D_DATA.split("\n")
+            send_str = ','.join(D_DATA)
+            cmd_byte = bytearray(send_str[:-1], 'utf-8')
+            unix_out['OUT'].send(cmd_byte)
+            D_SEND = False
+        time.sleep(1)
 
     return 0
 

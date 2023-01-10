@@ -120,7 +120,7 @@ K4A_DEPTH_MODE_NFOV_2X2BINNED
 CS EA-B123-C5-S32-H2-G0-WA-P0-L2
 ```
 ###### Run capture sequence console:
-A python script, executed form the host machine, to send capture and storage management sequences and communicate with the contained machine via UNIX sockets. Please note that the script will add the execution timestamp as a last parameter in the capture sequence.
+A python script, executed form the host machine, to send capture and storage management sequences and communicate with the contained machine via UNIX sockets. **Please note** that the script will add the execution timestamp as a last parameter in the capture sequence.
 ```
 cd include/
 sudo python3 socket_coms_console.py
@@ -146,11 +146,9 @@ Enter Capture Sequence # K30MJPG21602-EA-B128-C5-S32-H1-G0-WA-P0-L2
 
 ###### Storage management commands
 
-```
-Empty /storage Directory: SM-RM-ALL
-Remove single capture: SM-RM-FILENAME
-List all captures: SM-LS-ALL
-```
+* Empty /storage directory: **SM-RM-ALL**
+* Remove single capture using filename (timestamp): **SM-RM-FILENAME**
+* List all captures inside /storage directory: **SM-LS-ALL**
 
 ###### Example response:
 ```
@@ -164,11 +162,14 @@ Enter Capture Sequence # SM-RM-1673370956
 
 Enter Capture Sequence # SM-LS-ALL
 
-[HOST MACHINE] K4A Image str: SM-LS-ALL-1673371041
+[HOST MACHINE] K4A Capture cmd: SM-LS-ALL-1673383032
 [HOST MACHINE] Sending data on socket: /tmp/payload_sockets/kinect_luna/pl_sock
 [HOST MACHINE] connecting to /tmp/payload_sockets/kinect_luna/pl_sock
 [HOST MACHINE] Connected
 [HOST MACHINE] Done..
+
+[HOST MACHINE] Received data from /tmp/payload_sockets/kinect_luna/sm_sock
+ DATA [35]: b'1673382998.tar.gz,1673383011.tar.gz'
 
 Enter Capture Sequence # SM-RM-ALL
 
@@ -177,4 +178,12 @@ Enter Capture Sequence # SM-RM-ALL
 [HOST MACHINE] connecting to /tmp/payload_sockets/kinect_luna/pl_sock
 [HOST MACHINE] Connected
 [HOST MACHINE] Done..
+```
+
+###### Run test script
+The following test script send 108 capture sequences covering all basic parameters of the Azure Kinect sensor API such as FPS, resolution, and depth mode.
+
+```
+cd include/
+sudo python3 socket_coms_test.py
 ```

@@ -13,6 +13,7 @@ import time
 PRINT_PREPEND = '[HOST MACHINE] '
 UNIX_SOCKETS_BASE_DIR = '/tmp/payload_sockets/kinect_luna/'
 UNIX_ADDR_OUT = UNIX_SOCKETS_BASE_DIR + 'pl_sock'
+UNIX_ADDR_IN = UNIX_SOCKETS_BASE_DIR + 'sm_sock'
 
 class UNIX_Coms():
 
@@ -82,10 +83,21 @@ class UNIX_Coms():
 
 def main():
 
+    unix_in = {}
     unix_out = {}
 
     def closeAll():
+        [unix_in[key].close() for key in unix_in]
         [unix_out[key].close() for key in unix_out]
+
+    try:
+        unix_in = {
+            'IN' : UNIX_Coms(UNIX_ADDR_IN),
+        }
+        [unix_in[key].bind_to_socket() for key in unix_in]
+    except:
+        print(PRINT_PREPEND + 'Error creating outgoing UNIX socket(s)')
+        unix_in = None
 
     try:
         unix_out = {
@@ -109,7 +121,7 @@ def main():
         else:
             cmd_byte = bytearray(input_cmd+'-'+str(ts), 'utf-8')
 
-        print('\n'+PRINT_PREPEND + 'K4A Image str: ' + input_cmd+'-'+str(ts))
+        print('\n'+PRINT_PREPEND + 'K4A Capture cmd: ' + input_cmd+'-'+str(ts))
 
         unix_out['OUT'].send(cmd_byte)
 
