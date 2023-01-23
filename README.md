@@ -68,9 +68,10 @@ sudo systemctl restart docker
 source: [nvidia-container-toolkit](https://github.com/NVIDIA/nvidia-docker/issues/1186)
 
 #### Build payload's Docker image:
+Execute the following commands on the host machine.
 ```
 cd AKALL/
-docker build -t payload_image .
+sudo docker build -t payload_image .
 ```
 * This docker image will install the following key packages:
  * python3 and python3-pip
@@ -80,6 +81,7 @@ docker build -t payload_image .
  * Creates and binds UNIX sockets in /tmp/payload_sockets
 
 #### Launch container:
+Similarly, from the host machine, execute the following:
 ```
 sudo chmod +x ./scripts/launch_container.sh
 sudo ./scripts/launch_container.sh payload_container payload_image
@@ -118,7 +120,7 @@ K4A_DEPTH_MODE_NFOV_2X2BINNED
 CS EA-B123-C5-S32-H2-G0-WA-P0-L2
 ```
 #### Run capture sequence console:
-A python script, executed form the host machine, to send capture and storage management sequences and communicate with the contained machine via UNIX sockets. **Please note** that the script will add the execution timestamp as a last parameter in the capture sequence.
+A python script, executed form the host machine, to send capture and storage management sequences and communicate with the contained machine via UNIX sockets. **Note that this script will automatically append a timestamp as a last parameter in the capture sequence.**
 ```
 cd include/
 sudo python3 socket_coms_console.py
@@ -146,6 +148,9 @@ Enter Capture Sequence # K30MJPG21602-EA-B128-C5-S32-H1-G0-WA-P0-L2
 
 * Empty /storage directory: **SM-RM-ALL**
 * Remove single capture using filename (timestamp): **SM-RM-FILENAME**
+  * Please note that ".tar.gz" is automatically appended to the filename
+  * The files are stored in a shared directory "/tmp/payload_storage" on the host machine
+  * The files are automatically named by the software running within the docker container, the format used to name these files is as follows: timestamp.tar.gz example: 1673370956.tar.gz
 * List all captures inside /storage directory: **SM-LS-ALL**
 
 ###### Example response:
@@ -179,7 +184,7 @@ Enter Capture Sequence # SM-RM-ALL
 ```
 
 #### Run test script
-The following test script generates 108 capture sequences covering some of the basic parameters of the Azure Kinect sensor API such as FPS, resolution, and depth mode.
+The following test script generates **108 capture sequences** covering some of the basic parameters of the Azure Kinect sensor API such as FPS, resolution, and depth mode.
 
 ```
 cd include/
