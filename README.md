@@ -192,10 +192,24 @@ sudo python3 socket_coms_test.py
 ```
 
 #### Convert Depth and IR data into grayscale Image
-Each pixel of DEPTH16 (or IR16) data is two bytes of little-endian unsigned depth data. To convert into a grayscale image:
+Each pixel of DEPTH16 (and IR16) data is two bytes of little-endian unsigned depth data (b16g). We can use ImageMagick to convert the depth data into a grayscale .pgm image:
 
-Install ImageMagick using apt: ``sudo apt-get install imagemagick``
+Install ImageMagick using apt:
+```
+sudo apt update
+sudo apt install imagemagick
+```
 
 ```
-convert -size 640x576 -depth 16 -endian LSB -define quantum:format=unsigned -define quantum:separate -depth 8 gray:ir16 -normalize ir16.pgm
+convert -size 640x576 -depth 16 -endian LSB -define quantum:format=unsigned -define quantum:separate -depth 16 gray:IR16_FILENAME -normalize IR16_CONVERTED_FILENAME.pgm
 ```
+The table below can help you find the correct resolution associated with each depth mode in the capture sequence. Example: K05MJPG07201 is a capture sequence message where the depth mode is set to 1 (NFOV 2x2 binned with a resolution of 320x288). [Read more: Depth camera operating modes](https://learn.microsoft.com/en-us/azure/kinect-dk/hardware-specification)
+
+| AKAL ID |         MODE         |    RES    |    FOI    |     RANGE     | EXPOSURE |
+|:-------:|:--------------------:|:---------:|:---------:|:-------------:|:--------:|
+| 0       | OFF                  | N/A       | N/A       | N/A           | N/A      |
+| 1       | NFOV 2x2 binned (SW) | 320x288   | 75°x65°   | 0.5 - 5.46 m  | 12.8 ms  |
+| 2       | NFOV unbinned        | 640x576   | 75°x65°   | 0.5 - 3.86 m  | 12.8 ms  |
+| 3       | WFOV 2x2 binned      | 512x512   | 120°x120° | 0.25 - 2.88 m | 12.8 ms  |
+| 4       | WFOV unbinned        | 1024x1024 | 120°x120° | 0.25 - 2.21 m | 20.3 ms  |
+| 5       | Passive IR           | 1024x1024 | N/A       | N/A           | 1.6 ms   |
