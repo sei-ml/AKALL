@@ -1,5 +1,5 @@
 ##  Azure Kinect a la Luna (AKALL)
-Our team developed a custom software application that utilizes the [Azure Kinect DK](https://learn.microsoft.com/en-us/azure/kinect-dk/) through the C and C++ Sensor API  to control the camera and capture data from its various sensors. The application is designed within a Docker container running Ubuntu 18.04 LTS, providing an isolated and portable environment for it to operate in, ideal for integration within larger computing systems such as rovers and robots. We implemented a UNIX socket server using Python3, which allows the application to communicate with other programs and devices using the UNIX socket protocol. The socket server enables the application to control the camera using special capture sequence messages, which are custom commands or instructions that we have implemented.
+Our team developed a custom software application that utilizes the [Azure Kinect SDK](https://learn.microsoft.com/en-us/azure/kinect-dk/) through the C and C++ Sensor API  to control the camera and capture data from its various sensors. The application is designed within a Docker container running Ubuntu 18.04 LTS, providing an isolated and portable environment for it to operate in, ideal for integration within larger computing systems such as rovers and robots. We implemented a UNIX socket server using Python3, which allows the application to communicate with other programs and devices using the UNIX socket protocol. The socket server enables the application to control the camera using special capture sequence messages, which are custom commands or instructions that we have implemented.
 The application utilizes a number of key concepts in its operation. The `pl_sock` binds messages that are incoming from the host machine to the payload's container, while the `sm_sock` binds messages that are incoming to the host machine from the payload's container. The shared directory, `/storage`, allows for communication between the payload's container and the host machine. The application's socket server and logger are launched using the script, `./scripts/entrypoint.sh`, which enables communication with other programs and devices using the UNIX socket protocol, and allows for control of the camera using custom capture sequence messages.
 
 ### Capture Sequence:
@@ -189,4 +189,11 @@ The following test script generates **108 capture sequences** covering some of t
 ```
 cd include/
 sudo python3 socket_coms_test.py
+```
+
+#### Convert Depth and IR data into grayscale Image
+Install ImageMagick using apt: ``sudo apt-get install imagemagick``
+
+```
+convert -size 640x576 -depth 16 -endian LSB -define quantum:format=unsigned -define quantum:separate -depth 8 gray:ir16 -normalize ir16.pgm
 ```
