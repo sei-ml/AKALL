@@ -209,7 +209,7 @@ int main(int argc,char* argv[]){
     k4a_device_close(device);
     return 1;
   }
-  int captureFrameCount = 3;
+  int captureFrameCount = 30;
   const auto ltt = std::chrono::system_clock::now();
   int64_t timestamp = std::chrono::duration_cast<std::chrono::seconds>(ltt.time_since_epoch()).count() ;
   const char* path = "/storage/";
@@ -261,8 +261,8 @@ int main(int argc,char* argv[]){
       std::string filename = path + std::to_string(timestamp) + "IR" + fps + std::to_string(k4a_image_get_width_pixels(image)) + depth;
       depth_blk = std::to_string(timestamp) + "IR" + fps + std::to_string(k4a_image_get_width_pixels(image)) + depth;
       printf(" | Ir16 res:%4dx%4d stride:%5d ",
-      k4a_image_get_height_pixels(image),
       k4a_image_get_width_pixels(image),
+      k4a_image_get_height_pixels(image),
       k4a_image_get_stride_bytes(image));
       WriteToFile(filename.c_str(), k4a_image_get_buffer( image ), k4a_image_get_size(image));
 
@@ -280,8 +280,8 @@ int main(int argc,char* argv[]){
       std::string filename = path + std::to_string(timestamp) + "D" + fps + std::to_string(k4a_image_get_width_pixels(image)) + depth;
       ir_blk = std::to_string(timestamp) + "D" + fps + std::to_string(k4a_image_get_width_pixels(image)) + depth;;
       printf(" | Depth16 res:%4dx%4d stride:%5d\n",
-      k4a_image_get_height_pixels(image),
       k4a_image_get_width_pixels(image),
+      k4a_image_get_height_pixels(image),
       k4a_image_get_stride_bytes(image));
       WriteToFile(filename.c_str(), k4a_image_get_buffer( image ), k4a_image_get_size(image));
 
