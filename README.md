@@ -192,6 +192,8 @@ sudo python3 socket_coms_test.py
 ```
 
 #### Convert Depth and IR data into grayscale Image
+Each pixel of DEPTH16 (or IR16) data is two bytes of little-endian unsigned depth data. To convert into a grayscale image:
+
 Install ImageMagick using apt: ``sudo apt-get install imagemagick``
 
 ```
