@@ -304,6 +304,9 @@ int main(int argc,char* argv[]){
       //compress captured framgents
       string compress_cmd = "calibrate;cd /storage; tar -czf " + to_string(timestamp) + ".tar.gz " + color_blk + " " + depth_blk + " " + ir_blk+" calibration.json; rm calibration.json "+ color_blk + " " + depth_blk + " " + ir_blk;
       system(compress_cmd.c_str());
+
+      string log_cmd = "cd /storage; touch " + unix_time + ".log; echo '/storage/"+to_string(timestamp)+".tar.gz'>>"+ unix_time+".log";
+      system(log_cmd.c_str());
     }
 
   }

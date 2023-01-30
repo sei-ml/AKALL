@@ -57,14 +57,15 @@ class UNIX_Coms():
                 cmd = data.decode('utf-8').split('-')
                 params = list(cmd[0])
                 input_error = False;
+                global D_DATA
+                global D_SEND
 
                 if(cmd[0] == "SM" or cmd[0] == "sm"):
                     if(cmd[1] == "LS" or cmd[1] == "ls"):
                         if(cmd[2] == "ALL" or cmd[2] == "all"):
                             cmd_var = subprocess.run(['ls', '/storage'], stdout=subprocess.PIPE)
                             #print('\n'+PRINT_PREPEND + '/storage: \n: ' + cmd_var.stdout.decode('utf-8'))
-                            global D_DATA
-                            global D_SEND
+
                             D_DATA = cmd_var.stdout.decode('utf-8')
                             D_SEND = True
                     if(cmd[1] == "RM" or cmd[1] == "rm"):
@@ -149,11 +150,17 @@ class UNIX_Coms():
                         if input_error == False:
                             os.system('check-device -f {} -c {} -r {} -d {} -t {} -xp {} -br {} -cn {} -st {} -sh {} -gn {} -wb {} -bl {} -pl {}'.format(fps, color, resolution, depth, cmd[len(cmd)-1], exposure, brightness, contrast, saturation, sharpness, gain, white_balance, blacklight_comp, powerline_freq))
                             print(PRINT_PREPEND + 'K4A Color Settings: {} {} {} {} {} {} {} {} {}'.format(exposure, brightness, contrast, saturation, sharpness, gain, white_balance, blacklight_comp, powerline_freq))
+                            logfile = '{}'.format(cmd[len(cmd)-1])+'.log '
+                            D_DATA = logfile
+                            D_SEND = True
                     elif(len(cmd) >= 1 or len(cmd) <= 3):
                         print(PRINT_PREPEND + 'Loading K4A Default Color Settings..')
                         if input_error == False:
                             os.system('check-device -f {} -c {} -r {} -d {} -t {}'.format(fps, color, resolution, depth, cmd[len(cmd)-1]))
                             print(PRINT_PREPEND+'check-device -f {} -c {} -r {} -d {} -t {}'.format(fps, color, resolution, depth, cmd[len(cmd)-1]))
+                            logfile = '{}'.format(cmd[len(cmd)-1])+'.log '
+                            D_DATA = logfile
+                            D_SEND = True
                     else:
                         input_error = True;
                         print(ERROR_PREPEND + 'The following command ' + data.decode('utf-8') + ' is not a valid capture sequence..')

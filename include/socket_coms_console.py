@@ -51,7 +51,7 @@ class UNIX_Coms():
         while (True):
             data = self.sock.recv(4096)
             if data:
-                print(PRINT_PREPEND + 'Received data from {} | DATA [{}]: {}'.format(self.server_address, len(data), data))
+                print('\n'+PRINT_PREPEND + ' Received data from {} | DATA [{}]: {} '.format(self.server_address, len(data), data))
 
     '''
         Connects to existing UNIX sockets
