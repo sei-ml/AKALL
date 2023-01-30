@@ -1,6 +1,7 @@
 ##  Azure Kinect a la Luna (AKALL)
 Our team developed a custom software application that utilizes the [Azure Kinect SDK](https://learn.microsoft.com/en-us/azure/kinect-dk/) through the C and C++ Sensor API  to control the camera and capture data from its various sensors. The application is designed within a Docker container running Ubuntu 18.04 LTS, providing an isolated and portable environment for it to operate in, ideal for integration within larger computing systems such as rovers and robots. We implemented a UNIX socket server using Python3, which allows the application to communicate with other programs and devices using the UNIX socket protocol. The socket server enables the application to control the camera using special capture sequence messages, which are custom commands or instructions that we have implemented.
-The application utilizes a number of key concepts in its operation. The `pl_sock` binds messages that are incoming from the host machine to the payload's container, while the `sm_sock` binds messages that are incoming to the host machine from the payload's container. The shared directory, `/storage`, allows for communication between the payload's container and the host machine. The application's socket server and logger are launched using the script, `./scripts/entrypoint.sh`, which enables communication with other programs and devices using the UNIX socket protocol, and allows for control of the camera using custom capture sequence messages.
+
+The application utilizes a number of key concepts in its operation. The `pl_sock` binds messages that are incoming from the host machine to the payload's container, while the `sm_sock` binds messages that are incoming to the host machine from the payload's container. The shared directory, `/storage`, allows for communication between the payload's container and the host machine. A successful capture will generate four files (**color.jpg, depth16, ir16, and calibration.json**) these files are then compressed and stored in shared directory. The application's socket server and logger are launched using the script, `./scripts/entrypoint.sh`, which enables communication with other programs and devices using the UNIX socket protocol, and allows for control of the camera using custom capture sequence messages. 
 
 ### Capture Sequence:
 Here is a list of example commands that can be used to affect the camera's built-in parameters and set compression and other parameters:
@@ -11,7 +12,7 @@ Here is a list of example commands that can be used to affect the camera's built
   * K30MJPG21602-1671006644
   * K15MJPG30720-1671006655
 
-In these commands, the first part is mandatory to ensure a successful capture sequence ("K05MJPG07201", "K05MJPG10801", etc.), and it indicates the frame rate (FPS) and compression used, as well as other parameters. For instance, the "05" in the first part represents the FPS, "MJPG" represents the compression used, and "0720" is the resolution (in this case, 720p). The "1" at the end of the first part indicates the depth mode. The camera is capable of capturing up to 4k resolution, and there are four different depth modes available to access through the Azure Kinect SDK.  
+In these commands, the first part is mandatory to ensure a successful capture sequence ("K05MJPG07201", "K05MJPG10801", etc.), and it indicates the frame rate (FPS) and compression used, as well as other parameters. For instance, the "05" in the first part represents the FPS, "MJPG" represents the compression used, and "0720" is the resolution (in this case, 720p). The "1" at the end of the first part indicates the depth mode. The camera is capable of capturing up to 4k resolution, and there are four different depth modes available to access through the Azure Kinect SDK.
 
 ```
   K |  15  | MJPG | 0720 | 1          | 1671006655
@@ -48,6 +49,7 @@ WHITE BALANCE: A, Integer of 10 incremends from 2500 to 12500. Default: WA
 BLACKLIGHT COMPENSATION: 0,1. Default: P0
 POWER LINE FREQUENCY: 1: 50hz ,2: 60Hz. Default: L2
 ```
+
 ### Install and Build:
 #### Install Nvidia Docker toolkit on Ubuntu 18.04 or 20.04:
 Set distribution variable based on your system's configuration.
@@ -192,7 +194,7 @@ sudo python3 socket_coms_test.py
 ```
 
 #### Convert Depth and IR data into grayscale Image
-Each pixel of DEPTH16 (and IR16) data is two bytes of little-endian unsigned depth data (b16g). We can use ImageMagick to convert the depth data into a grayscale .pgm image:
+Each pixel of DEPTH16 (and IR16) data is two bytes of little-endian unsigned depth data (b16g). We can use ImageMagick to convert the depth data into a grayscale .pgm or .bmp image:
 
 Install ImageMagick using apt:
 ```
