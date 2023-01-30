@@ -7,21 +7,22 @@
 #include <vector>
 #include <unistd.h>
 #include <chrono>
+using namespace std;
 
 long WriteToFile(const char *fileName, void *buffer, size_t bufferSize) {
-  std::ofstream hFile;
-  hFile.open(fileName, std::ios::out | std::ios::trunc | std::ios::binary);
+  ofstream hFile;
+  hFile.open(fileName, ios::out | ios::trunc | ios::binary);
   if (hFile.is_open()){
-    hFile.write((char *)buffer, static_cast<std::streamsize>(bufferSize));
+    hFile.write((char *)buffer, static_cast<streamsize>(bufferSize));
     hFile.close();
   }
   return 0;
 }
 
 int main(int argc,char* argv[]){
-  std::string fps, color, resolution, depth, unix_time;
-  std::string exposure, brightness, contrast, saturation;
-  std::string sharpness, gain, white_balance, blacklight_comp, powerline_freq;
+  string fps, color, resolution, depth, unix_time;
+  string exposure, brightness, contrast, saturation;
+  string sharpness, gain, white_balance, blacklight_comp, powerline_freq;
 
   if(argc >= 2){
     fps = argv[2];
@@ -210,12 +211,12 @@ int main(int argc,char* argv[]){
     return 1;
   }
   int captureFrameCount = 30;
-  const auto ltt = std::chrono::system_clock::now();
-  int64_t timestamp = std::chrono::duration_cast<std::chrono::seconds>(ltt.time_since_epoch()).count() ;
+  const auto ltt = chrono::system_clock::now();
+  int64_t timestamp = chrono::duration_cast<chrono::seconds>(ltt.time_since_epoch()).count() ;
   const char* path = "/storage/";
-  std::string color_blk;
-  std::string depth_blk;
-  std::string ir_blk;
+  string color_blk;
+  string depth_blk;
+  string ir_blk;
 
   while (captureFrameCount-- > 0) {
     k4a_image_t image;
@@ -240,8 +241,8 @@ int main(int argc,char* argv[]){
     image = k4a_capture_get_color_image(capture);
     if (image)
     {
-      std::string filename = path + std::to_string(timestamp) + "C" + fps + color + resolution + ".jpeg";
-      color_blk = std::to_string(timestamp) + "C" + fps + color + resolution + ".jpeg";
+      string filename = path + to_string(timestamp) + "C" + fps + color + resolution + ".jpeg";
+      color_blk = to_string(timestamp) + "C" + fps + color + resolution + ".jpeg";
       printf(" | Color res:%4dx%4d stride:%5d ",
       k4a_image_get_height_pixels(image),
       k4a_image_get_width_pixels(image),
@@ -258,8 +259,8 @@ int main(int argc,char* argv[]){
     image = k4a_capture_get_ir_image(capture);
     if (image != NULL)
     {
-      std::string filename = path + std::to_string(timestamp) + "IR" + fps + std::to_string(k4a_image_get_width_pixels(image)) + depth;
-      depth_blk = std::to_string(timestamp) + "IR" + fps + std::to_string(k4a_image_get_width_pixels(image)) + depth;
+      string filename = path + to_string(timestamp) + "IR" + fps + to_string(k4a_image_get_width_pixels(image)) + depth;
+      depth_blk = to_string(timestamp) + "IR" + fps + to_string(k4a_image_get_width_pixels(image)) + depth;
       printf(" | Ir16 res:%4dx%4d stride:%5d ",
       k4a_image_get_width_pixels(image),
       k4a_image_get_height_pixels(image),
@@ -277,8 +278,8 @@ int main(int argc,char* argv[]){
     image = k4a_capture_get_depth_image(capture);
     if (image != NULL)
     {
-      std::string filename = path + std::to_string(timestamp) + "D" + fps + std::to_string(k4a_image_get_width_pixels(image)) + depth;
-      ir_blk = std::to_string(timestamp) + "D" + fps + std::to_string(k4a_image_get_width_pixels(image)) + depth;;
+      string filename = path + to_string(timestamp) + "D" + fps + to_string(k4a_image_get_width_pixels(image)) + depth;
+      ir_blk = to_string(timestamp) + "D" + fps + to_string(k4a_image_get_width_pixels(image)) + depth;;
       printf(" | Depth16 res:%4dx%4d stride:%5d\n",
       k4a_image_get_width_pixels(image),
       k4a_image_get_height_pixels(image),
@@ -301,7 +302,7 @@ int main(int argc,char* argv[]){
       k4a_device_stop_cameras(device);
       k4a_device_close(device);
       //compress captured framgents
-      std::string compress_cmd = "calibrate;cd /storage; tar -czf " + std::to_string(timestamp) + ".tar.gz " + color_blk + " " + depth_blk + " " + ir_blk+" calibration.json; rm calibration.json "+ color_blk + " " + depth_blk + " " + ir_blk;
+      string compress_cmd = "calibrate;cd /storage; tar -czf " + to_string(timestamp) + ".tar.gz " + color_blk + " " + depth_blk + " " + ir_blk+" calibration.json; rm calibration.json "+ color_blk + " " + depth_blk + " " + ir_blk;
       system(compress_cmd.c_str());
     }
 
