@@ -223,7 +223,7 @@ def main():
     while True:
         if D_SEND == True:
             D_DATA = D_DATA.split("\n")
-            send_str = ','.join(D_DATA)
+            send_str = ''.join(D_DATA)
             cmd_byte = bytearray(send_str[:-1], 'utf-8')
             unix_out['OUT'].send(cmd_byte)
             D_SEND = False
