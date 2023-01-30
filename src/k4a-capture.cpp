@@ -297,15 +297,15 @@ int main(int argc,char* argv[]){
     fflush(stdout);
 
     if(captureFrameCount==0){
+      // Shut down the camera when finished with application logic
+      k4a_device_stop_cameras(device);
+      k4a_device_close(device);
       //compress captured framgents
-      std::string compress_cmd = "cd /storage; tar -czf " + std::to_string(timestamp) + ".tar.gz " + color_blk + " " + depth_blk + " " + ir_blk+"; rm "+ color_blk + " " + depth_blk + " " + ir_blk;
+      std::string compress_cmd = "calibrate;cd /storage; tar -czf " + std::to_string(timestamp) + ".tar.gz " + color_blk + " " + depth_blk + " " + ir_blk+" calibration.json; rm calibration.json "+ color_blk + " " + depth_blk + " " + ir_blk;
       system(compress_cmd.c_str());
     }
 
   }
-  // Shut down the camera when finished with application logic
-  k4a_device_stop_cameras(device);
-  k4a_device_close(device);
 
   return 0;
 

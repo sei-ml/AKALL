@@ -33,7 +33,8 @@ COPY scripts /home/payload/workspace/scripts
 RUN chmod +x /home/payload/workspace/scripts/*.sh
 
 ### build payload software
-RUN gcc -g -Wall  /home/payload/workspace/src/k4a-capture.cpp -o /usr/local/bin/check-device -lk4a -lstdc++;
+RUN gcc -g -Wall  /home/payload/workspace/src/k4a-capture.cpp -o /usr/local/bin/check-device -lk4a -lstdc++; \
+gcc -g -Wall  /home/payload/workspace/src/get-calibration.cpp -o /usr/local/bin/calibrate -lk4a -lstdc++
 
 # Env vars for the nvidia-container-runtime.
 ENV NVIDIA_VISIBLE_DEVICES all
