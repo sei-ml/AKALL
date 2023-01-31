@@ -15,8 +15,6 @@ PRINT_PREPEND = '[KINECT LUNA] '
 ERROR_PREPEND = '[ERROR] '
 UNIX_SOCKETS_BASE_DIR = '/tmp/payload_sockets/'
 UNIX_ADDR_IN = UNIX_SOCKETS_BASE_DIR + 'pl_sock'
-D_SEND = False
-D_DATA = ''
 
 class UNIX_Coms():
 
