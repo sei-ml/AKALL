@@ -3,10 +3,14 @@
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <string>
 #include <vector>
 #include <unistd.h>
 #include <chrono>
+#include <cerrno>
+
 using namespace std;
 
 long WriteToFile(const char *fileName, void *buffer, size_t bufferSize) {
@@ -82,125 +86,125 @@ int main(int argc,char* argv[]){
 
   // Set cameras settings based on capture sequence
   if(fps=="5")
-    config.camera_fps       = K4A_FRAMES_PER_SECOND_5;
+  config.camera_fps       = K4A_FRAMES_PER_SECOND_5;
   else if(fps=="15")
-    config.camera_fps       = K4A_FRAMES_PER_SECOND_15;
+  config.camera_fps       = K4A_FRAMES_PER_SECOND_15;
   else if(fps=="30")
-    config.camera_fps       = K4A_FRAMES_PER_SECOND_15;
+  config.camera_fps       = K4A_FRAMES_PER_SECOND_15;
 
   if(color=="MJPG")
-    config.color_format     = K4A_IMAGE_FORMAT_COLOR_MJPG;
+  config.color_format     = K4A_IMAGE_FORMAT_COLOR_MJPG;
   else if(color=="NV12")
-    config.color_format     = K4A_IMAGE_FORMAT_COLOR_NV12;
+  config.color_format     = K4A_IMAGE_FORMAT_COLOR_NV12;
   else if(color=="YUY2")
-    config.color_format     = K4A_IMAGE_FORMAT_COLOR_YUY2;
+  config.color_format     = K4A_IMAGE_FORMAT_COLOR_YUY2;
   else if(color=="BGRA32")
-    config.color_format     = K4A_IMAGE_FORMAT_COLOR_BGRA32;
+  config.color_format     = K4A_IMAGE_FORMAT_COLOR_BGRA32;
   else if(color=="DEPTH16")
-    config.color_format     = K4A_IMAGE_FORMAT_DEPTH16;
+  config.color_format     = K4A_IMAGE_FORMAT_DEPTH16;
   else if(color=="IR16")
-    config.color_format     = K4A_IMAGE_FORMAT_IR16;
+  config.color_format     = K4A_IMAGE_FORMAT_IR16;
 
   if(resolution=="OFF")
-    config.color_resolution     = K4A_COLOR_RESOLUTION_OFF;
+  config.color_resolution     = K4A_COLOR_RESOLUTION_OFF;
   else if(resolution=="720P")
-    config.color_resolution     = K4A_COLOR_RESOLUTION_720P;
+  config.color_resolution     = K4A_COLOR_RESOLUTION_720P;
   else if(resolution=="1080P")
-    config.color_resolution     = K4A_COLOR_RESOLUTION_1080P;
+  config.color_resolution     = K4A_COLOR_RESOLUTION_1080P;
   else if(resolution=="1440P")
-    config.color_resolution     = K4A_COLOR_RESOLUTION_1440P;
+  config.color_resolution     = K4A_COLOR_RESOLUTION_1440P;
   else if(resolution=="1536P")
-    config.color_resolution     = K4A_COLOR_RESOLUTION_1536P;
+  config.color_resolution     = K4A_COLOR_RESOLUTION_1536P;
   else if(resolution=="2160P")
-    config.color_resolution     = K4A_COLOR_RESOLUTION_2160P;
+  config.color_resolution     = K4A_COLOR_RESOLUTION_2160P;
   else if(resolution=="3072P")
-    config.color_resolution     = K4A_COLOR_RESOLUTION_3072P;
+  config.color_resolution     = K4A_COLOR_RESOLUTION_3072P;
 
   if(depth=="OFF")
-    config.depth_mode     = K4A_DEPTH_MODE_OFF;
+  config.depth_mode     = K4A_DEPTH_MODE_OFF;
   else if(depth=="NFOV_2X2BINNED")
-    config.depth_mode     = K4A_DEPTH_MODE_NFOV_2X2BINNED;
+  config.depth_mode     = K4A_DEPTH_MODE_NFOV_2X2BINNED;
   else if(depth=="NFOV_UNBINNED")
-    config.depth_mode     = K4A_DEPTH_MODE_NFOV_UNBINNED;
+  config.depth_mode     = K4A_DEPTH_MODE_NFOV_UNBINNED;
   else if(depth=="WFOV_2X2BINNED")
-    config.depth_mode     = K4A_DEPTH_MODE_WFOV_2X2BINNED;
+  config.depth_mode     = K4A_DEPTH_MODE_WFOV_2X2BINNED;
   else if(depth=="WFOV_UNBINNED")
-    config.depth_mode     = K4A_DEPTH_MODE_WFOV_UNBINNED;
+  config.depth_mode     = K4A_DEPTH_MODE_WFOV_UNBINNED;
   else if(depth=="PASSIVE_IR")
-    config.depth_mode     = K4A_DEPTH_MODE_PASSIVE_IR;
+  config.depth_mode     = K4A_DEPTH_MODE_PASSIVE_IR;
 
   if(argc>12){
-  //Default is A
-  if(exposure=="A")
+    //Default is A
+    if(exposure=="A")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_AUTO, 0);
-  else if (exposure=="M1" || exposure=="M500")
+    else if (exposure=="M1" || exposure=="M500")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 500);
-  else if (exposure=="M2" || exposure=="M1250")
+    else if (exposure=="M2" || exposure=="M1250")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 1250);
-  else if (exposure=="M3" || exposure=="M2500")
+    else if (exposure=="M3" || exposure=="M2500")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 2500);
-  else if (exposure=="M4" || exposure=="M10000")
+    else if (exposure=="M4" || exposure=="M10000")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 10000);
-  else if (exposure=="M5" || exposure=="M20000")
+    else if (exposure=="M5" || exposure=="M20000")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 20000);
-  else if (exposure=="M6" || exposure=="M30000")
+    else if (exposure=="M6" || exposure=="M30000")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 30000);
-  else if (exposure=="M7" || exposure=="M40000")
+    else if (exposure=="M7" || exposure=="M40000")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 40000);
-  else if (exposure=="M8" || exposure=="M50000")
+    else if (exposure=="M8" || exposure=="M50000")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 50000);
-  else if (exposure=="M9" || exposure=="M60000")
+    else if (exposure=="M9" || exposure=="M60000")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 60000);
-  else if (exposure=="M10" || exposure=="M80000")
+    else if (exposure=="M10" || exposure=="M80000")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 80000);
-  else if (exposure=="M11" || exposure=="M100000")
+    else if (exposure=="M11" || exposure=="M100000")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 100000);
-  else if (exposure=="M12" || exposure=="M120000")
+    else if (exposure=="M12" || exposure=="M120000")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 120000);
-  else if (exposure=="M13" || exposure=="M130000")
+    else if (exposure=="M13" || exposure=="M130000")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_EXPOSURE_TIME_ABSOLUTE, K4A_COLOR_CONTROL_MODE_MANUAL, 130000);
 
-  //Default value is 128
-  int brightness_integer = atoi(brightness.c_str());
-  if(brightness_integer>=0 || brightness_integer <=255)
+    //Default value is 128
+    int brightness_integer = atoi(brightness.c_str());
+    if(brightness_integer>=0 || brightness_integer <=255)
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_BRIGHTNESS, K4A_COLOR_CONTROL_MODE_MANUAL, brightness_integer );
 
-  //Defaul value is 5
-  int contrast_integer = atoi(contrast.c_str());
-  if(contrast_integer>=0 || contrast_integer <=10)
+    //Defaul value is 5
+    int contrast_integer = atoi(contrast.c_str());
+    if(contrast_integer>=0 || contrast_integer <=10)
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_CONTRAST, K4A_COLOR_CONTROL_MODE_MANUAL, contrast_integer );
 
-  //Default value is 32
-  int saturation_integer = atoi(saturation.c_str());
-  if(saturation_integer>=0 || saturation_integer <=63)
+    //Default value is 32
+    int saturation_integer = atoi(saturation.c_str());
+    if(saturation_integer>=0 || saturation_integer <=63)
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_SATURATION, K4A_COLOR_CONTROL_MODE_MANUAL, saturation_integer );
 
-  //Default value is 2
-  int sharpness_integer = atoi(sharpness.c_str());
-  if(sharpness_integer>=0 || sharpness_integer <=4)
+    //Default value is 2
+    int sharpness_integer = atoi(sharpness.c_str());
+    if(sharpness_integer>=0 || sharpness_integer <=4)
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_SHARPNESS, K4A_COLOR_CONTROL_MODE_MANUAL, sharpness_integer );
 
-  //Default value is 0
-  int gain_integer = atoi(gain.c_str());
-  if(gain_integer >= 0 || gain_integer <=255)
+    //Default value is 0
+    int gain_integer = atoi(gain.c_str());
+    if(gain_integer >= 0 || gain_integer <=255)
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_GAIN, K4A_COLOR_CONTROL_MODE_MANUAL, gain_integer );
 
-  //Default is A
-  if(white_balance == "A")
+    //Default is A
+    if(white_balance == "A")
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_WHITEBALANCE, K4A_COLOR_CONTROL_MODE_AUTO, 0 );
-  else{
+    else{
       int white_balance_integer = atoi(white_balance.c_str());
       white_balance_integer = white_balance_integer - (white_balance_integer%10);
       k4a_device_set_color_control(device, K4A_COLOR_CONTROL_WHITEBALANCE, K4A_COLOR_CONTROL_MODE_MANUAL, white_balance_integer);
       printf("DEBUG: %i\n", white_balance_integer);
-  }
+    }
 
-  int blacklight_comp_integer = atoi(blacklight_comp.c_str());
-  if(blacklight_comp_integer == 0 || blacklight_comp_integer ==1)
+    int blacklight_comp_integer = atoi(blacklight_comp.c_str());
+    if(blacklight_comp_integer == 0 || blacklight_comp_integer ==1)
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_BACKLIGHT_COMPENSATION, K4A_COLOR_CONTROL_MODE_MANUAL, blacklight_comp_integer );
 
-  int powerline_freq_integer = atoi(powerline_freq.c_str());
-  if(powerline_freq_integer == 0 || powerline_freq_integer ==1)
+    int powerline_freq_integer = atoi(powerline_freq.c_str());
+    if(powerline_freq_integer == 0 || powerline_freq_integer ==1)
     k4a_device_set_color_control(device, K4A_COLOR_CONTROL_BACKLIGHT_COMPENSATION, K4A_COLOR_CONTROL_MODE_MANUAL, powerline_freq_integer );
   }
   // Start the camera with the given configuration
@@ -305,8 +309,32 @@ int main(int argc,char* argv[]){
       string compress_cmd = "calibrate;cd /storage; tar -czf " + to_string(timestamp) + ".tar.gz " + color_blk + " " + depth_blk + " " + ir_blk+" calibration.json; rm calibration.json "+ color_blk + " " + depth_blk + " " + ir_blk;
       system(compress_cmd.c_str());
 
-      string log_cmd = "cd /storage; touch " + unix_time + ".log; echo '/storage/"+to_string(timestamp)+".tar.gz'>>"+ unix_time+".log";
-      system(log_cmd.c_str());
+      //Send data fragments over UNIX socket
+      int sock = socket(AF_UNIX, SOCK_DGRAM, 0);
+      if (sock < 0) {
+        cerr << "Failed to create socket: " << strerror(errno) << endl;
+        return 1;
+      }
+
+      struct sockaddr_un addr;
+      memset(&addr, 0, sizeof(addr));
+      addr.sun_family = AF_UNIX;
+      strcpy(addr.sun_path, "/tmp/payload_sockets/sm_sock");
+
+      if (connect(sock, (struct sockaddr *) &addr, sizeof(addr)) < 0) {
+        cerr << "Failed to connect to socket: " << strerror(errno) << endl;
+        return 1;
+      }
+
+      // Send data to the socket
+      string data = to_string(timestamp) + ".tar.gz";
+      if (write(sock, data.c_str(), data.size()) < 0) {
+        cerr << "Failed to send data to socket: " << strerror(errno) << endl;
+        return 1;
+      }
+
+      close(sock);
+      
     }
 
   }

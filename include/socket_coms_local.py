@@ -15,7 +15,6 @@ PRINT_PREPEND = '[KINECT LUNA] '
 ERROR_PREPEND = '[ERROR] '
 UNIX_SOCKETS_BASE_DIR = '/tmp/payload_sockets/'
 UNIX_ADDR_IN = UNIX_SOCKETS_BASE_DIR + 'pl_sock'
-UNIX_ADDR_OUT = UNIX_SOCKETS_BASE_DIR + 'sm_sock'
 D_SEND = False
 D_DATA = ''
 
@@ -57,17 +56,8 @@ class UNIX_Coms():
                 cmd = data.decode('utf-8').split('-')
                 params = list(cmd[0])
                 input_error = False;
-                global D_DATA
-                global D_SEND
 
                 if(cmd[0] == "SM" or cmd[0] == "sm"):
-                    if(cmd[1] == "LS" or cmd[1] == "ls"):
-                        if(cmd[2] == "ALL" or cmd[2] == "all"):
-                            cmd_var = subprocess.run(['ls', '/storage'], stdout=subprocess.PIPE)
-                            #print('\n'+PRINT_PREPEND + '/storage: \n: ' + cmd_var.stdout.decode('utf-8'))
-
-                            D_DATA = cmd_var.stdout.decode('utf-8')
-                            D_SEND = True
                     if(cmd[1] == "RM" or cmd[1] == "rm"):
                         if(cmd[2] == "ALL" or cmd[2] == "all"):
                             if(os.path.exists('/storage')):
@@ -77,7 +67,6 @@ class UNIX_Coms():
                             if(os.path.exists('/storage/'+cmd[2]+'.tar.gz')):
                                 os.system('rm /storage/'+cmd[2]+'.tar.gz')
                                 print(PRINT_PREPEND + 'File '+cmd[2]+'.tar.gz removed from /storage directory.')
-
 
                 if(len(params) == 12):
                     fps = params[1]+params[2]
@@ -150,17 +139,11 @@ class UNIX_Coms():
                         if input_error == False:
                             os.system('check-device -f {} -c {} -r {} -d {} -t {} -xp {} -br {} -cn {} -st {} -sh {} -gn {} -wb {} -bl {} -pl {}'.format(fps, color, resolution, depth, cmd[len(cmd)-1], exposure, brightness, contrast, saturation, sharpness, gain, white_balance, blacklight_comp, powerline_freq))
                             print(PRINT_PREPEND + 'K4A Color Settings: {} {} {} {} {} {} {} {} {}'.format(exposure, brightness, contrast, saturation, sharpness, gain, white_balance, blacklight_comp, powerline_freq))
-                            logfile = '{}'.format(cmd[len(cmd)-1])+'.log '
-                            D_DATA = logfile
-                            D_SEND = True
                     elif(len(cmd) >= 1 or len(cmd) <= 3):
                         print(PRINT_PREPEND + 'Loading K4A Default Color Settings..')
                         if input_error == False:
                             os.system('check-device -f {} -c {} -r {} -d {} -t {}'.format(fps, color, resolution, depth, cmd[len(cmd)-1]))
                             print(PRINT_PREPEND+'check-device -f {} -c {} -r {} -d {} -t {}'.format(fps, color, resolution, depth, cmd[len(cmd)-1]))
-                            logfile = '{}'.format(cmd[len(cmd)-1])+'.log '
-                            D_DATA = logfile
-                            D_SEND = True
                     else:
                         input_error = True;
                         print(ERROR_PREPEND + 'The following command ' + data.decode('utf-8') + ' is not a valid capture sequence..')
@@ -170,7 +153,6 @@ class UNIX_Coms():
     '''
     def connect_to_socket(self):
         connect = False
-        #while(connect == False):
         try:
             print(PRINT_PREPEND + 'connecting to {}'.format(self.server_address))
             self.sock.connect(self.server_address)
@@ -195,13 +177,9 @@ class UNIX_Coms():
 
 def main():
     unix_in  = {}
-    unix_out  = {}
-    global D_SEND
-    global D_DATA
 
     def closeAll():
         [unix_in[key].close() for key in unix_in]
-        [unix_out[key].close() for key in unix_out]
 
     try:
         unix_in = {
@@ -211,24 +189,7 @@ def main():
     except:
         print(PRINT_PREPEND + 'Error creating outgoing UNIX socket(s)')
         unix_in = None
-
-    try:
-        unix_out = {
-            'OUT'          : UNIX_Coms(UNIX_ADDR_OUT),
-        }
-    except:
-        print(PRINT_PREPEND + 'Error creating outgoing UNIX socket(s)')
-        unix_out = None
-
-    while True:
-        if D_SEND == True:
-            D_DATA = D_DATA.split("\n")
-            send_str = ''.join(D_DATA)
-            cmd_byte = bytearray(send_str[:-1], 'utf-8')
-            unix_out['OUT'].send(cmd_byte)
-            D_SEND = False
-        time.sleep(1)
-
+        
     return 0
 
 if __name__ == '__main__':
