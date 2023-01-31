@@ -1,7 +1,7 @@
 ##  Azure Kinect a la Luna (AKALL)
 Our team developed a custom software application that utilizes the [Azure Kinect SDK](https://learn.microsoft.com/en-us/azure/kinect-dk/) through the C and C++ Sensor API  to control the camera and capture data from its various sensors. The application is designed within a Docker container running Ubuntu 18.04 LTS, providing an isolated and portable environment for it to operate in, ideal for integration within larger computing systems such as rovers and robots. We implemented a UNIX socket server using Python3, which allows the application to communicate with other programs and devices using the UNIX socket protocol. The socket server enables the application to control the camera using special capture sequence messages, which are custom commands or instructions that we have implemented.
 
-The application utilizes a number of key concepts in its operation. The `pl_sock` binds messages that are incoming from the host machine to the payload's container, while the `sm_sock` binds messages that are incoming to the host machine from the payload's container. The shared directory, `/storage`, allows for communication between the payload's container and the host machine. A successful capture will generate four files (**color.jpg, depth16, ir16, and calibration.json**) these files are then compressed and stored in shared directory. The application's socket server and logger are launched using the script, `./scripts/entrypoint.sh`, which enables communication with other programs and devices using the UNIX socket protocol, and allows for control of the camera using custom capture sequence messages. 
+The application utilizes a number of key concepts in its operation. The `pl_sock` binds messages that are incoming from the host machine to the payload's container, while the `sm_sock` binds messages that are incoming to the host machine from the payload's container. The shared directory, `/storage`, allows for communication between the payload's container and the host machine. A successful capture will generate four files (**color.jpg, depth16, ir16, and calibration.json**) these files are then compressed and stored in shared directory. The application's socket server and logger are launched using the script, `./scripts/entrypoint.sh`, which enables communication with other programs and devices using the UNIX socket protocol, and allows for control of the camera using custom capture sequence messages.
 
 ### Capture Sequence:
 Here is a list of example commands that can be used to affect the camera's built-in parameters and set compression and other parameters:
@@ -122,7 +122,8 @@ K4A_DEPTH_MODE_NFOV_2X2BINNED
 CS EA-B123-C5-S32-H2-G0-WA-P0-L2
 ```
 #### Run capture sequence console:
-A python script, executed form the host machine, to send capture and storage management sequences and communicate with the contained machine via UNIX sockets. **Note that this script will automatically append a timestamp as a last parameter in the capture sequence.**
+A python script, executed form the host machine, that launches the debugging console to send and receive data from the container. This scripts listens and binds to the ``sm_sock`` UNIX domain socket. The filename is sent through that socket upon a successful capture. 
+**Note that this script will automatically append a timestamp as a last parameter in the capture sequence.**
 ```
 cd include/
 sudo python3 socket_coms_console.py
@@ -137,6 +138,9 @@ Enter Capture Sequence # K15MJPG30721
 [HOST MACHINE] Connected
 [HOST MACHINE] Done..
 
+[HOST MACHINE]  Received data from /tmp/payload_sockets/kinect_luna/sm_sock
+                DATA [17]: b'1675132016.tar.gz'
+
 Enter Capture Sequence # K30MJPG21602-EA-B128-C5-S32-H1-G0-WA-P0-L2
 
 [HOST MACHINE] K4A Image str: K30MJPG21602-EA-B128-C5-S32-H1-G0-WA-P0-L2-1673315140
@@ -144,6 +148,9 @@ Enter Capture Sequence # K30MJPG21602-EA-B128-C5-S32-H1-G0-WA-P0-L2
 [HOST MACHINE] connecting to /tmp/payload_sockets/kinect_luna/pl_sock
 [HOST MACHINE] Connected
 [HOST MACHINE] Done..
+
+[HOST MACHINE]  Received data from /tmp/payload_sockets/kinect_luna/sm_sock
+                DATA [17]: b'1675132036.tar.gz'
 ```
 
 #### Storage management commands
@@ -153,7 +160,6 @@ Enter Capture Sequence # K30MJPG21602-EA-B128-C5-S32-H1-G0-WA-P0-L2
   * Please note that ".tar.gz" is automatically appended to the filename
   * The files are stored in a shared directory "/tmp/payload_storage" on the host machine
   * The files are automatically named by the software running within the docker container, the format used to name these files is as follows: timestamp.tar.gz example: 1673370956.tar.gz
-* List all captures inside /storage directory: **SM-LS-ALL**
 
 ###### Example response:
 ```
