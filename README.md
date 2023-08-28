@@ -227,7 +227,7 @@ The table below can help you find the correct resolution associated with each de
 
 The MIT License (MIT)
 
-Copyright (c) 2023 Dr. Don D. Haddad Ph.D., Massachusetts Institute of Technology.
+Copyright (c) 2023 MIT RESOURCE.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
