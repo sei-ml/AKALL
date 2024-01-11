@@ -7,7 +7,7 @@
 ###
 
 ### Base image for your container
-FROM nvidia/cuda:11.4.0-base-ubuntu18.04
+FROM nvidia/cuda:11.0.3-base-ubuntu18.04
 
 ### Install required packages/dependencies
 RUN apt update -y && apt install -y \
@@ -45,5 +45,5 @@ WORKDIR /home/payload/workspace
 CMD ["/bin/bash", "/home/payload/workspace/scripts/entrypoint.sh"]
 
 LABEL maintainer="Don Derek Haddad <ddh@mit.edu>, Dogi <stefan@unterhauser.name>"
-LABEL version="1.1"
+LABEL version="1.2"
 LABEL description="Docker image for Azure Kinect SDK with CUDA 11.4.0 on Ubuntu 18.04"

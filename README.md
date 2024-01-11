@@ -86,7 +86,7 @@ sudo docker build -t payload_image .
 Similarly, from the host machine, execute the following:
 ```
 sudo chmod +x ./scripts/launch_container.sh
-sudo ./scripts/launch_container.sh payload_container payload_image
+sudo ./scripts/launch_container.sh payload_container akall_image
 ```
 ### Applications
 #### Run interactive mode:
@@ -197,6 +197,12 @@ The following test script generates **108 capture sequences** covering some of t
 ```
 cd include/
 sudo python3 socket_coms_test.py
+```
+
+#### Debugging
+To access the running docker container for debugging purposes issue the following docker command:
+```
+docker run --rm -it --entrypoint /bin/bash akall_image
 ```
 
 #### Convert Depth and IR data into grayscale Image
