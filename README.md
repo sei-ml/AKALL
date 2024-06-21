@@ -1,7 +1,17 @@
 ##  Azure Kinect a la Luna (AKALL)
-Our team developed a custom software application that utilizes the [Azure Kinect SDK](https://learn.microsoft.com/en-us/azure/kinect-dk/) through the C and C++ Sensor API  to control the camera and capture data from its various sensors. The application is designed within a Docker container running Ubuntu 18.04 LTS, providing an isolated and portable environment for it to operate in, ideal for integration within larger computing systems such as rovers and robots. We implemented a UNIX socket server using Python3, which allows the application to communicate with other programs and devices using the UNIX socket protocol. The socket server enables the application to control the camera using special capture sequence messages, which are custom commands or instructions that we have implemented.
+This custom software application utilizes the [Azure Kinect SDK](https://learn.microsoft.com/en-us/azure/kinect-dk/) through the C and C++ Sensor API to control the camera and capture data from its various sensors. The application is designed within a Docker container running Ubuntu 18.04 LTS, providing an isolated and portable environment for it to operate in, ideal for integration within larger computing systems such as rovers and robots.
 
-The application utilizes a number of key concepts in its operation. The `pl_sock` binds messages that are incoming from the host machine to the payload's container, while the `sm_sock` binds messages that are incoming to the host machine from the payload's container. The shared directory, `/storage`, allows for communication between the payload's container and the host machine. A successful capture will generate four files (**color.jpg, depth16, ir16, and calibration.json**) these files are then compressed and stored in shared directory. The application's socket server and logger are launched using the script, `./scripts/entrypoint.sh`, which enables communication with other programs and devices using the UNIX socket protocol, and allows for control of the camera using custom capture sequence messages.
+## Features
+
+- **UNIX Socket Server**: Implemented using Python3, the UNIX socket server enables communication with other programs and devices using the UNIX socket protocol. The server allows the application to control the camera using special capture sequence messages, which are custom commands or instructions.
+
+- **Message Binding**: 
+  - `pl_sock` binds messages incoming from the host machine to the payload's container.
+  - `sm_sock` binds messages incoming to the host machine from the payload's container.
+
+- **Shared Directory**: The shared directory `/storage` facilitates communication between the payload's container and the host machine. A successful capture generates four files: `color.jpg`, `depth16`, `ir16`, and `calibration.json`. These files are then compressed and stored in the shared directory.
+
+- **Entrypoint Script**: The application's socket server and logger are launched using the script `./scripts/entrypoint.sh`. This script enables communication with other programs and devices using the UNIX socket protocol and allows for control of the camera using custom capture sequence messages.
 
 ### Capture Sequence:
 Here is a list of example commands that can be used to affect the camera's built-in parameters and set compression and other parameters:
