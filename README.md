@@ -85,7 +85,7 @@ Execute the following commands on the host machine.
 cd AKALL/
 sudo docker build -t payload_image .
 ```
-* This docker image will install the following key packages:
+This docker image will install the following key packages:
  * python3 and python3-pip
  * k4a-tools and libk4a1.4-dev
  * software-properties-common, curl, build-essential...etc
