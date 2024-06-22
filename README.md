@@ -63,7 +63,7 @@ POWER LINE FREQUENCY: 1: 50hz ,2: 60Hz. Default: L2
 ### Install and Build:
 #### Install Nvidia Docker toolkit on Ubuntu 18.04 or 20.04:
 Set distribution variable based on your system's configuration.
-Note: only test on systems equipped with Nvidia GPU (Nvidia GTX-1080).
+Note: Tested on development machine equipped with Nvidia GPU (Nvidia GTX-1080).
 ```
 distribution=ubuntu18.04
 ```
