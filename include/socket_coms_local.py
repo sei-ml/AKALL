@@ -75,9 +75,9 @@ class UNIX_Coms():
                     if fps != '05' and fps != '15' and fps != '30':
                         input_error = True
                         print(ERROR_PREPEND + 'Invalid FPS value ' + fps + '.')
-                    if color != 'MJPG':
-                        input_error = True
-                        print(ERROR_PREPEND + 'Invalid color format ' + color + '. Currently only supports MJPG.')
+                    #if color != 'MJPG':
+                    #    input_error = True
+                    #    print(ERROR_PREPEND + 'Invalid color format ' + color + '. Currently only supports MJPG.')
                     if resolution != '0720' and resolution != '1080' and resolution != '1440' and resolution != '1536' and resolution != '2160' and resolution != '3072':
                         input_error = True
                         print(ERROR_PREPEND + 'Invalid resolution ' + resolution + '. Supported resolution:  720, 1080, 1440, 1536, 2160, 3072')
