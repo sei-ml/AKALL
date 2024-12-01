@@ -7,7 +7,6 @@
 
 using namespace std;
 
-// Function Prototypes
 static string get_depth_mode_string(k4a_depth_mode_t depth_mode);
 static string get_color_resolution_string(k4a_color_resolution_t color_resolution);
 static string get_serial(k4a_device_t device);
@@ -56,15 +55,12 @@ static void save_calibration_data(k4a_device_t device, k4a_depth_mode_t depth_mo
         return;
     }
 
-    // Save calibration parameters to JSON file
     ofstream file(filename);
     if (file.is_open())
     {
         file << "{" << endl;
         file << "  \"DepthMode\": \"" << get_depth_mode_string(depth_mode) << "\"," << endl;
         file << "  \"ColorResolution\": \"" << get_color_resolution_string(color_resolution) << "\"," << endl;
-
-        // Depth camera calibration parameters
         file << "  \"DepthCameraCalibration\": {" << endl;
         file << "    \"ResolutionWidth\": " << calibration.depth_camera_calibration.resolution_width << "," << endl;
         file << "    \"ResolutionHeight\": " << calibration.depth_camera_calibration.resolution_height << "," << endl;
@@ -79,8 +75,6 @@ static void save_calibration_data(k4a_device_t device, k4a_depth_mode_t depth_mo
         file << "      \"TangentialDistortion\": [" << calibration.depth_camera_calibration.intrinsics.parameters.param.p1 << ", "
              << calibration.depth_camera_calibration.intrinsics.parameters.param.p2 << "]" << endl;
         file << "    }," << endl;
-
-        // Extrinsic parameters
         file << "    \"Extrinsics\": {" << endl;
         file << "      \"Rotation\": [" << calibration.depth_camera_calibration.extrinsics.rotation[0] << ", "
              << calibration.depth_camera_calibration.extrinsics.rotation[1] << ", "
@@ -95,8 +89,22 @@ static void save_calibration_data(k4a_device_t device, k4a_depth_mode_t depth_mo
              << calibration.depth_camera_calibration.extrinsics.translation[1] << ", "
              << calibration.depth_camera_calibration.extrinsics.translation[2] << "]" << endl;
         file << "    }" << endl;
+        file << "  }," << endl;
+        file << "  \"ColorCameraCalibration\": {" << endl;
+        file << "    \"ResolutionWidth\": " << calibration.color_camera_calibration.resolution_width << "," << endl;
+        file << "    \"ResolutionHeight\": " << calibration.color_camera_calibration.resolution_height << "," << endl;
+        file << "    \"Intrinsics\": {" << endl;
+        file << "      \"FocalLengthX\": " << calibration.color_camera_calibration.intrinsics.parameters.param.fx << "," << endl;
+        file << "      \"FocalLengthY\": " << calibration.color_camera_calibration.intrinsics.parameters.param.fy << "," << endl;
+        file << "      \"PrincipalPointX\": " << calibration.color_camera_calibration.intrinsics.parameters.param.cx << "," << endl;
+        file << "      \"PrincipalPointY\": " << calibration.color_camera_calibration.intrinsics.parameters.param.cy << "," << endl;
+        file << "      \"RadialDistortion\": [" << calibration.color_camera_calibration.intrinsics.parameters.param.k1 << ", "
+             << calibration.color_camera_calibration.intrinsics.parameters.param.k2 << ", "
+             << calibration.color_camera_calibration.intrinsics.parameters.param.k3 << "]," << endl;
+        file << "      \"TangentialDistortion\": [" << calibration.color_camera_calibration.intrinsics.parameters.param.p1 << ", "
+             << calibration.color_camera_calibration.intrinsics.parameters.param.p2 << "]" << endl;
+        file << "    }" << endl;
         file << "  }" << endl;
-
         file << "}" << endl;
         file.close();
         cout << "Calibration data saved to " << filename << endl;
@@ -161,7 +169,6 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    // Define all depth modes and color resolutions
     k4a_depth_mode_t depth_modes[] = {
         K4A_DEPTH_MODE_OFF,
         K4A_DEPTH_MODE_NFOV_2X2BINNED,
@@ -181,23 +188,19 @@ int main(int argc, char **argv)
         K4A_COLOR_RESOLUTION_3072P
     };
 
-    // Loop through each combination of depth mode and color resolution
     string serial_number = get_serial(device);
     for (k4a_depth_mode_t depth_mode : depth_modes)
     {
         for (k4a_color_resolution_t color_resolution : color_resolutions)
         {
-            // Generate descriptive filename for the calibration JSON
             string depth_mode_str = get_depth_mode_string(depth_mode);
             string color_resolution_str = get_color_resolution_string(color_resolution);
             string filename = color_resolution_str + "_" + depth_mode_str + "_calibration.json";
 
-            // Save detailed calibration data
             save_calibration_data(device, depth_mode, color_resolution, filename);
         }
     }
 
-    // Close the device after use
     k4a_device_close(device);
     return 0;
 }
